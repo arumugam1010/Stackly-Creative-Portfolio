@@ -1,0 +1,90 @@
+{
+  "blogs": [
+    {
+      "id": 1,
+      "title": "Unlocking Hyper-Automation in Enterprise Architecture (2026)",
+      "category": "DevOps",
+      "author": "Marcus Thorne",
+      "date": "July 5, 2026",
+      "excerpt": "Discover how automated systems are reshaping operations, improving scalability and slashing overhead expenses across Fortune 500 corporations.",
+      "readTime": "6 min read",
+      "tags": ["Automation", "Cloud", "Kubernetes"]
+    },
+    {
+      "id": 2,
+      "title": "Quantum Cryptography and the Future of Cybersecurity Protocols",
+      "category": "Cybersecurity",
+      "author": "Dr. Aris Vance",
+      "date": "June 28, 2026",
+      "excerpt": "As quantum computing edges closer to commercial availability, traditional encryption methods must evolve to resist post-quantum cyber threats.",
+      "readTime": "8 min read",
+      "tags": ["Quantum", "Security", "Crypto"]
+    },
+    {
+      "id": 3,
+      "title": "Designing Immersive UX in the Glassmorphism Era",
+      "category": "UI/UX Design",
+      "author": "Sienna Rose",
+      "date": "June 14, 2026",
+      "excerpt": "A deep dive into building premium interface structures using blur filters, neon outlines, and responsive spatial depth maps.",
+      "readTime": "4 min read",
+      "tags": ["Design", "Glassmorphism", "CSS3"]
+    }
+  ],
+  "careers": [
+    {
+      "id": "c1",
+      "title": "Senior Cloud Infrastructure Architect",
+      "department": "DevOps",
+      "salary": "$140,000 - $185,000",
+      "type": "Full-Time",
+      "location": "Singapore / Hybrid",
+      "desc": "Lead the design and rollout of multi-cloud architectures utilizing AWS, Kubernetes, Terraform, and advanced cyber safeguards."
+    },
+    {
+      "id": "c2",
+      "title": "AI / Machine Learning Engineer",
+      "department": "Engineering",
+      "salary": "$130,000 - $170,000",
+      "type": "Full-Time",
+      "location": "San Francisco, USA",
+      "desc": "Build and tune generative models, pipeline neural networks, and integrate cognitive search tools into our flagship IT suite."
+    },
+    {
+      "id": "c3",
+      "title": "Lead UI/UX Interaction Designer",
+      "department": "Design",
+      "salary": "$110,000 - $145,000",
+      "type": "Full-Time",
+      "location": "London, UK / Remote",
+      "desc": "Own user experience design for premium dashboards, enterprise portals, and design-to-code pipelines using modern prototyping software."
+    }
+  ],
+  "internships": [
+    {
+      "id": "i1",
+      "title": "Software Engineering Intern (Summer 2026)",
+      "department": "Engineering",
+      "allowance": "$3,000 - $4,500 monthly",
+      "duration": "6 Months",
+      "location": "Singapore / Remote",
+      "desc": "Partner with senior coders to ship clean production code in TypeScript, Node.js, and automated unit testing suites."
+    },
+    {
+      "id": "i2",
+      "title": "DevOps & Cloud Intern",
+      "department": "DevOps",
+      "allowance": "$3,200 - $4,600 monthly",
+      "duration": "3-6 Months",
+      "location": "Munich, Germany",
+      "desc": "Learn infrastructure-as-code deployments, continuous integration configurations, and observability setups."
+    }
+  ],
+  "statistics": {
+    "projectsCompleted": 4820,
+    "activeUsers": 294000,
+    "uptimePercent": 99.99,
+    "teamExperts": 250,
+    "globalOffices": 8
+  }
+}

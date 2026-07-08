@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Manager Console | Stackly Creative Portfolio</title>
+  <link rel="stylesheet" href="../assets/css/global.css">
+  <link rel="stylesheet" href="../assets/css/dashboard.css">
+  <style>
+    /* Content tabs styling */
+    .db-tab-content {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+    .db-tab-content.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Table styling for directory */
+    .pm-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e2e8f0;
+      margin-top: 1.5rem;
+    }
+    .pm-table th, .pm-table td {
+      padding: 1rem 1.5rem;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .pm-table th {
+      background-color: #f8fafc;
+      color: #475569;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pm-table td {
+      color: #334155;
+      font-size: 0.9rem;
+    }
+    
+    /* Kanban styling */
+    .kanban-board-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .kanban-col {
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1rem;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .kanban-col-header {
+      font-family: var(--font-title);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #1e293b;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 0.5rem;
+    }
+    .kanban-cards-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      flex-grow: 1;
+    }
+    .kanban-card-item {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+      cursor: grab;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kanban-card-item:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      transform: translateY(-1px);
+    }
+    
+    /* Sprints milestone bars */
+    .milestone-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .milestone-row {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+    .milestone-progress-bg {
+      height: 8px;
+      background: #f1f5f9;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+    .milestone-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #9333ea 0%, #a855f7 100%);
+      border-radius: 4px;
+      width: 0%;
+      transition: width 1s ease-in-out;
+    }
+  </style>
+</head>
+<body class="db-body">
+
+  <div class="background-blobs">
+    <div class="blob blob-cyan"></div>
+    <div class="blob blob-purple"></div>
+  </div>
+
+  <div class="dashboard-container">
+    
+    <!-- Sidebar -->
+    <aside class="db-sidebar">
+      <div class="db-sidebar-header">
+        <a href="../index.html" class="brand-logo" style="display: flex; align-items: center; text-decoration: none;">
+          <img src="../assets/images/logo-stackly.png" alt="Stackly Logo" style="height: 24px; width: auto; filter: brightness(0); display: block;">
+        </a>
+        <button id="sidebar-toggle" style="background: none; border: none; cursor: pointer; font-size: 1.2rem; color: #334155;">◀</button>
+      </div>
+
+      <nav class="sidebar-menu">
+        <!-- CATEGORY: MAIN -->
+        <div class="sidebar-category-header first">Main</div>
+        <ul class="sidebar-menu-list">
+          <!-- 1. PM Overview -->
+          <li class="sidebar-menu-item active">
+            <a href="#overview-tab">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              <span class="sidebar-collapsed-text">PM Overview</span>
+            </a>
+          </li>
+          
+          <!-- 2. Client Accounts -->
+          <li class="sidebar-menu-item">
+            <a href="#clients-tab">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              <span class="sidebar-collapsed-text">Client Accounts</span>
+              <span class="sidebar-badge">8</span>
+            </a>
+          </li>
+
+          <!-- 3. Works Showcase -->
+          <li class="sidebar-menu-item">
+            <a href="#works-tab">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+              <span class="sidebar-collapsed-text">Works Showcase</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- CATEGORY: CONTENT -->
+        <div class="sidebar-category-header">Content</div>
+        <ul class="sidebar-menu-list">
+          <!-- 4. Active Sprints -->
+          <li class="sidebar-menu-item">
+            <a href="#sprints-tab">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span class="sidebar-collapsed-text">Active Sprints</span>
+            </a>
+          </li>
+
+          <!-- 5. Kanban Board -->
+          <li class="sidebar-menu-item">
+            <a href="#kanban-tab">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+              <span class="sidebar-collapsed-text">Kanban Board</span>
+            </a>
+          </li>
+
+          <!-- 6. Team Assignment -->
+          <li class="sidebar-menu-item">
+            <a href="#team-tab">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+              <span class="sidebar-collapsed-text">Team Assignment</span>
+            </a>
+          </li>
+
+          <!-- 7. Blog Editor -->
+          <li class="sidebar-menu-item">
+            <a href="#blog-tab">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+              <span class="sidebar-collapsed-text">Blog Editor</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- CATEGORY: ACCOUNT -->
+        <div class="sidebar-category-header">Account</div>
+        <ul class="sidebar-menu-list">
+          <!-- 8. My Profile -->
+          <li class="sidebar-menu-item">
+            <a href="#profile-tab">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <span class="sidebar-collapsed-text">My Profile</span>
+            </a>
+          </li>
+
+          <!-- Settings Tab -->
+          <li class="sidebar-menu-item">
+            <a href="#settings-tab">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              <span class="sidebar-collapsed-text">Settings</span>
+            </a>
+          </li>
+
+          <!-- 9. Logout -->
+          <li class="sidebar-menu-item" id="logout-item">
+            <a href="#logout" style="color: #ef4444 !important;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+              <span class="sidebar-collapsed-text">Logout</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="db-main">
+      
+      <!-- Top Header -->
+      <header class="db-top-header">
+        <div style="display: flex; align-items: center;">
+          <button class="mobile-db-sidebar-toggle" id="mobile-sidebar-toggle">☰</button>
+          <h1 style="font-family: var(--font-title); font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">Project Manager Console</h1>
+        </div>
+        
+        <div class="db-profile-menu">
+          <input type="text" class="db-search-bar" placeholder="Search sprints...">
+          <div style="display: flex; align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.35rem 0.85rem; border-radius: 20px; border: 1px solid #e2e8f0;">
+            <div style="width: 24px; height: 24px; background: #9333ea; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.75rem;">PM</div>
+            <span style="font-size: 0.8rem; font-weight: 600;" id="header-user-email">pm</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Contents -->
+      <div class="db-content">
+        
+        <!-- Breadcrumbs -->
+        <div class="db-breadcrumb">
+          <a href="#">Portal</a> <span>/</span> <a href="#">Console</a> <span>/</span> <span id="breadcrumb-current">PM Overview</span>
+        </div>
+
+        <!-- TAB 1: PM Overview -->
+        <div id="overview-tab" class="db-tab-content active">
+          <div class="db-grid-stats">
+            <!-- 1. Active Projects -->
+            <div class="db-stat-card card-box-left" style="background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #bfdbfe; border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+                <span style="font-size: 0.85rem; font-weight: 600; color: #1d4ed8;">Active Projects</span>
+                <span style="background: #bfdbfe; padding: 0.35rem; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: #1d4ed8;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                </span>
+              </div>
+              <div class="db-stat-val" style="color: #1e3a8a; font-size: 2.2rem; font-weight: 700; margin-top: 1rem; margin-bottom: 0.25rem;">12</div>
+              <div class="db-stat-change up" style="color: #2563eb; font-size: 0.8rem; font-weight: 600;">▲ 2 started this week</div>
+            </div>
+
+            <!-- 2. Team Resource Load -->
+            <div class="db-stat-card card-box-left" style="background: linear-gradient(135deg, #f5f3ff, #ede9fe); border: 1px solid #ddd6fe; border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+                <span style="font-size: 0.85rem; font-weight: 600; color: #6d28d9;">Team Resource Load</span>
+                <span style="background: #ddd6fe; padding: 0.35rem; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: #6d28d9;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </span>
+              </div>
+              <div class="db-stat-val" style="color: #4c1d95; font-size: 2.2rem; font-weight: 700; margin-top: 1rem; margin-bottom: 0.25rem;">84%</div>
+              <div class="db-stat-change up" style="color: #7c3aed; font-size: 0.8rem; font-weight: 600;">▲ 3 designers fully loaded</div>
+            </div>
+
+            <!-- 3. Pending Approvals -->
+            <div class="db-stat-card card-box-left" style="background: linear-gradient(135deg, #fff7ed, #ffedd5); border: 1px solid #fed7aa; border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+                <span style="font-size: 0.85rem; font-weight: 600; color: #c2410c;">Pending Approvals</span>
+                <span style="background: #fed7aa; padding: 0.35rem; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: #c2410c;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </span>
+              </div>
+              <div class="db-stat-val" style="color: #7c2d12; font-size: 2.2rem; font-weight: 700; margin-top: 1rem; margin-bottom: 0.25rem;">4</div>
+              <div class="db-stat-change up" style="color: #ea580c; font-size: 0.8rem; font-weight: 600;">▲ 2 portfolios awaiting review</div>
+            </div>
+
+            <!-- 4. Client Feedback -->
+            <div class="db-stat-card card-box-left" style="background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 1px solid #bbf7d0; border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+                <span style="font-size: 0.85rem; font-weight: 600; color: #047857;">Client Feedback</span>
+                <span style="background: #bbf7d0; padding: 0.35rem; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: #047857;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </span>
+              </div>
+              <div class="db-stat-val" style="color: #064e3b; font-size: 2.2rem; font-weight: 700; margin-top: 1rem; margin-bottom: 0.25rem;">4.9 / 5</div>
+              <div class="db-stat-change up" style="color: #16a34a; font-size: 0.8rem; font-weight: 600;">▲ 98% satisfaction rate</div>
+            </div>
+          </div>
+
+          <div class="db-charts-row">
+            <div class="chart-box-left">
+              <h3 class="chart-box-title">Sprint Accomplishment Rate</h3>
+              <div class="db-chart-container">
+                <div class="chart-bar-col" data-height="80" style="height: 0%;"><div class="chart-bar-tooltip">Sprint 21: 80%</div></div>
+                <div class="chart-bar-col" data-height="95" style="height: 0%;"><div class="chart-bar-tooltip">Sprint 22: 95%</div></div>
+                <div class="chart-bar-col" data-height="70" style="height: 0%;"><div class="chart-bar-tooltip">Sprint 23: 70%</div></div>
+                <div class="chart-bar-col" data-height="85" style="height: 0%;"><div class="chart-bar-tooltip">Sprint 24: 85%</div></div>
+                <div class="chart-bar-col" data-height="90" style="height: 0%;"><div class="chart-bar-tooltip">Sprint 25: 90%</div></div>
+                <div class="chart-bar-col" data-height="75" style="height: 0%;"><div class="chart-bar-tooltip">Sprint 26: 75%</div></div>
+                <div class="chart-bar-col" data-height="98" style="height: 0%;"><div class="chart-bar-tooltip">Sprint 27: 98%</div></div>
+              </div>
+              <p style="font-size: 0.75rem; color: #64748b; text-align: center;">Measured against predefined project deadlines.</p>
+            </div>
+            
+            <div class="chart-box-right" style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; justify-content: space-between;">
+              <h3 class="chart-box-title">Active Sprints breakdown</h3>
+              <div style="font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.85rem; color: #475569;">
+                <div>
+                  <span style="font-weight:600; color:#1e293b;">Branding Work (Vance Corp)</span>
+                  <div style="height: 6px; background:#f1f5f9; border-radius:3px; overflow:hidden; margin-top:0.25rem;">
+                    <div style="width: 85%; height: 100%; background: #9333ea;"></div>
+                  </div>
+                </div>
+                <div>
+                  <span style="font-weight:600; color:#1e293b;">Metasite Web3 Architecture</span>
+                  <div style="height: 6px; background:#f1f5f9; border-radius:3px; overflow:hidden; margin-top:0.25rem;">
+                    <div style="width: 60%; height: 100%; background: #9333ea;"></div>
+                  </div>
+                </div>
+                <div>
+                  <span style="font-weight:600; color:#1e293b;">Tesla AR Showcase App</span>
+                  <div style="height: 6px; background:#f1f5f9; border-radius:3px; overflow:hidden; margin-top:0.25rem;">
+                    <div style="width: 25%; height: 100%; background: #9333ea;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="db-two-column-card-grid" style="margin-top: 2rem;">
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+              <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Recent PM Activity</h3>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.8rem; color: #475569;">
+                <div style="padding: 0.75rem; background: #f8fafc; border-radius: 8px; border-left: 3px solid #10b981;"><strong>09:30 AM</strong> — Approved John Doe's timesheet (8.5 hrs)</div>
+                <div style="padding: 0.75rem; background: #f8fafc; border-radius: 8px; border-left: 3px solid #9333ea;"><strong>09:05 AM</strong> — Assigned MetaVR sprint tasks to Elena Rostova</div>
+                <div style="padding: 0.75rem; background: #f8fafc; border-radius: 8px; border-left: 3px solid #2563eb;"><strong>08:40 AM</strong> — Client call scheduled with Alice Vance (Vance Corp)</div>
+                <div style="padding: 0.75rem; background: #f8fafc; border-radius: 8px; border-left: 3px solid #eab308;"><strong>08:15 AM</strong> — 2 portfolio submissions awaiting review</div>
+              </div>
+            </div>
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+              <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Quick Actions</h3>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <button class="btn-green-cta-pill" style="justify-content: center; padding: 0.6rem; font-size: 0.8rem;">Assign New Task</button>
+                <button class="btn-add-cart" style="justify-content: center; padding: 0.6rem; font-size: 0.8rem;">Review Pending Works</button>
+                <button class="btn-add-cart" style="justify-content: center; padding: 0.6rem; font-size: 0.8rem;">Generate Sprint Report</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="db-hero-banner">
+            <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=900&q=80" alt="Project management meeting">
+            <div class="db-hero-banner-content">
+              <span style="font-size: 0.7rem; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 1px;">Client Call Today</span>
+              <h3 style="font-family: var(--font-title); font-size: 1.35rem; font-weight: 700; color: #0f172a;">Alice Vance — Vance Corp Sprint Review</h3>
+              <p style="font-size: 0.85rem; color: #64748b; line-height: 1.6;">Scheduled at 2:00 PM IST. Review branding deliverables, approve Sprint 27 milestone, and discuss Sprint 28 scope for typography system rollout.</p>
+              <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                <button class="btn-green-cta-pill" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Join Video Call</button>
+                <button class="btn-add-cart" style="padding: 0.5rem 1rem; font-size: 0.8rem;">View Client Deck</button>
+              </div>
+            </div>
+          </div>
+
+          <h3 style="font-family: var(--font-title); font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-top: 2.5rem; margin-bottom: 0.25rem;">Active Client Portfolio</h3>
+          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 0.5rem;">Visual snapshot of top accounts under your management.</p>
+          <div class="db-media-grid">
+            <div class="db-media-card">
+              <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=600&q=80" alt="Vance Corp project">
+              <div class="db-media-card-body">
+                <span style="font-size: 0.7rem; font-weight: 700; color: #d97706; text-transform: uppercase;">Vance Corp</span>
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b;">Brand Identity Sprint 27</h4>
+                <p style="font-size: 0.8rem; color: #64748b;">85% complete · $45K budget · 4 team members</p>
+              </div>
+            </div>
+            <div class="db-media-card">
+              <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=600&q=80" alt="Meta VR project">
+              <div class="db-media-card-body">
+                <span style="font-size: 0.7rem; font-weight: 700; color: #9333ea; text-transform: uppercase;">Meta Platforms</span>
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b;">MetaVR Spatial UI Kit</h4>
+                <p style="font-size: 0.8rem; color: #64748b;">60% complete · $120K budget · 6 team members</p>
+              </div>
+            </div>
+            <div class="db-media-card">
+              <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=600&q=80" alt="Tesla AR project">
+              <div class="db-media-card-body">
+                <span style="font-size: 0.7rem; font-weight: 700; color: #2563eb; text-transform: uppercase;">Tesla Motors</span>
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b;">AR Vehicle Configurator</h4>
+                <p style="font-size: 0.8rem; color: #64748b;">25% complete · $85K budget · 3 team members</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: Client Accounts -->
+        <div id="clients-tab" class="db-tab-content">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h2 style="font-family: var(--font-title); font-size: 1.5rem; font-weight: 700; color: #0f172a;">Active Client Accounts</h2>
+            <button class="btn-green-cta-pill" style="padding: 0.5rem 1rem; font-size: 0.8rem;">+ New Client</button>
+          </div>
+          <p style="color: #64748b; margin-bottom: 1.5rem;">Manage active client relationships, budgets, and sprint allocations across your portfolio.</p>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; text-align: center;">
+              <div style="font-size: 1.5rem; font-weight: 700; color: #9333ea;">5</div>
+              <div style="font-size: 0.75rem; color: #64748b;">Active Clients</div>
+            </div>
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; text-align: center;">
+              <div style="font-size: 1.5rem; font-weight: 700; color: #2563eb;">$370K</div>
+              <div style="font-size: 0.75rem; color: #64748b;">Total Budget</div>
+            </div>
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; text-align: center;">
+              <div style="font-size: 1.5rem; font-weight: 700; color: #10b981;">36</div>
+              <div style="font-size: 0.75rem; color: #64748b;">Total Sprints</div>
+            </div>
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; text-align: center;">
+              <div style="font-size: 1.5rem; font-weight: 700; color: #eab308;">2</div>
+              <div style="font-size: 0.75rem; color: #64748b;">Pending Inquiries</div>
+            </div>
+          </div>
+          <table class="pm-table">
+            <thead>
+              <tr>
+                <th>Client Brand</th>
+                <th>Primary Contact</th>
+                <th>Allocated Budget</th>
+                <th>Sprints Count</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Vance Corp</strong></td>
+                <td>Alice Vance</td>
+                <td>$45,000</td>
+                <td>8 Sprints</td>
+                <td>
+                  <button class="btn-add-cart" style="padding: 0.4rem 0.8rem; font-size: 0.7rem;">Message</button>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Meta Platforms</strong></td>
+                <td>Mark Zuckerberg</td>
+                <td>$120,000</td>
+                <td>16 Sprints</td>
+                <td>
+                  <button class="btn-add-cart" style="padding: 0.4rem 0.8rem; font-size: 0.7rem;">Message</button>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Tesla Motors</strong></td>
+                <td>Elon Musk</td>
+                <td>$85,000</td>
+                <td>12 Sprints</td>
+                <td>
+                  <button class="btn-add-cart" style="padding: 0.4rem 0.8rem; font-size: 0.7rem;">Message</button>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Google LLC</strong></td>
+                <td>Sundar Pichai</td>
+                <td>$95,000</td>
+                <td>10 Sprints</td>
+                <td>
+                  <button class="btn-add-cart" style="padding: 0.4rem 0.8rem; font-size: 0.7rem;">Message</button>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Apple Inc.</strong></td>
+                <td>Tim Cook</td>
+                <td>$25,000</td>
+                <td>4 Sprints</td>
+                <td>
+                  <button class="btn-add-cart" style="padding: 0.4rem 0.8rem; font-size: 0.7rem;">Message</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 style="font-family: var(--font-title); font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-top: 2.5rem; margin-bottom: 0.5rem;">Client Brand Gallery</h3>
+          <div class="db-client-strip">
+            <div class="db-client-chip">
+              <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=300&q=80" alt="Vance Corp">
+              <span>Vance Corp</span>
+            </div>
+            <div class="db-client-chip">
+              <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=300&q=80" alt="Meta">
+              <span>Meta Platforms</span>
+            </div>
+            <div class="db-client-chip">
+              <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=300&q=80" alt="Tesla">
+              <span>Tesla Motors</span>
+            </div>
+            <div class="db-client-chip">
+              <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=300&q=80" alt="Google">
+              <span>Google LLC</span>
+            </div>
+            <div class="db-client-chip">
+              <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=300&q=80" alt="Apple">
+              <span>Apple Inc.</span>
+            </div>
+            <div class="db-client-chip">
+              <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=300&q=80" alt="Microsoft">
+              <span>Microsoft</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: Works Showcase -->
+        <div id="works-tab" class="db-tab-content">
+          <h2 style="font-family: var(--font-title); font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem;">Portfolio Works Catalog</h2>
+          <p style="color: #64748b; margin-bottom: 1.5rem;">Overview of finalized or ongoing creative works within your project workspace.</p>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 1.5rem;">
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+              <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=500&q=80" alt="Work 1" style="width: 100%; height: 160px; object-fit: cover;">
+              <div style="padding: 1.25rem;">
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Vance Corp Brand Identity</h4>
+                <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 1rem;">Complete redesign including vector guidelines, dark elements, and typography.</p>
+                <span style="font-size: 0.7rem; font-weight: 700; color: #10b981; background: rgba(16,185,129,0.1); padding: 2px 6px; border-radius: 4px;">PUBLISHED</span>
+              </div>
+            </div>
+            
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+              <img src="https://images.unsplash.com/photo-1600132806370-bf17e65e942f?auto=format&fit=crop&w=500&q=80" alt="Work 2" style="width: 100%; height: 160px; object-fit: cover;">
+              <div style="padding: 1.25rem;">
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">MetaVR Interactive Mockups</h4>
+                <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 1rem;">Figma wireframes and high-fidelity prototype flows for meta quest 3 dashboards.</p>
+                <span style="font-size: 0.7rem; font-weight: 700; color: #eab308; background: rgba(234,179,8,0.1); padding: 2px 6px; border-radius: 4px;">UNDER REVIEW</span>
+              </div>
+            </div>
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+              <img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=500&q=80" alt="Work 3" style="width: 100%; height: 160px; object-fit: cover;">
+              <div style="padding: 1.25rem;">
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Tesla AR Showcase App</h4>
+                <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 1rem;">Mobile UI screens and AR interaction flows for Tesla vehicle showcase.</p>
+                <span style="font-size: 0.7rem; font-weight: 700; color: #2563eb; background: rgba(37,99,235,0.1); padding: 2px 6px; border-radius: 4px;">IN PROGRESS</span>
+              </div>
+            </div>
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80" alt="Work 4" style="width: 100%; height: 160px; object-fit: cover;">
+              <div style="padding: 1.25rem;">
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Cyberpunk Neon Brand Assets</h4>
+                <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 1rem;">3D neon branding elements and motion graphics for internal showcase.</p>
+                <span style="font-size: 0.7rem; font-weight: 700; color: #9333ea; background: rgba(147,51,234,0.1); padding: 2px 6px; border-radius: 4px;">DRAFT</span>
+              </div>
+            </div>
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=500&q=80" alt="Google AI dashboard" style="width: 100%; height: 160px; object-fit: cover;">
+              <div style="padding: 1.25rem;">
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Google AI Analytics Console</h4>
+                <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 1rem;">Enterprise KPI dashboard with live data widgets and role-based views.</p>
+                <span style="font-size: 0.7rem; font-weight: 700; color: #2563eb; background: rgba(37,99,235,0.1); padding: 2px 6px; border-radius: 4px;">IN PROGRESS</span>
+              </div>
+            </div>
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+              <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=500&q=80" alt="Stackly blog templates" style="width: 100%; height: 160px; object-fit: cover;">
+              <div style="padding: 1.25rem;">
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Stackly Blog Hero Templates</h4>
+                <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 1rem;">Reusable article layouts with responsive image slots and typography.</p>
+                <span style="font-size: 0.7rem; font-weight: 700; color: #10b981; background: rgba(16,185,129,0.1); padding: 2px 6px; border-radius: 4px;">PUBLISHED</span>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: 2rem; background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+            <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Portfolio Summary</h3>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; font-size: 0.85rem;">
+              <div><span style="color: #64748b;">Published:</span> <strong style="color:#10b981;">8 works</strong></div>
+              <div><span style="color: #64748b;">Under Review:</span> <strong style="color:#eab308;">3 works</strong></div>
+              <div><span style="color: #64748b;">In Progress:</span> <strong style="color:#2563eb;">2 works</strong></div>
+              <div><span style="color: #64748b;">Draft:</span> <strong>1 work</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: Active Sprints -->
+        <div id="sprints-tab" class="db-tab-content">
+          <h2 style="font-family: var(--font-title); font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem;">Sprint Tracker Console</h2>
+          <p style="color: #64748b; margin-bottom: 1.5rem;">Track progress metrics, milestones, and deadlines across your creative team sprint partitions.</p>
+          
+          <div class="milestone-container">
+            <div class="milestone-row">
+              <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.9rem; color: #1e293b;">
+                <span>Sprint 27: UI Design Phase (Vance Corp)</span>
+                <span>85% Completed</span>
+              </div>
+              <div class="milestone-progress-bg">
+                <div class="milestone-progress-bar" style="width: 85%;"></div>
+              </div>
+            </div>
+            
+            <div class="milestone-row">
+              <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.9rem; color: #1e293b;">
+                <span>Sprint 28: Front-End Implementation (Meta)</span>
+                <span>60% Completed</span>
+              </div>
+              <div class="milestone-progress-bg">
+                <div class="milestone-progress-bar" style="width: 60%; background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);"></div>
+              </div>
+            </div>
+            
+            <div class="milestone-row">
+              <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.9rem; color: #1e293b;">
+                <span>Sprint 29: QA Deployment (Tesla App)</span>
+                <span>25% Completed</span>
+              </div>
+              <div class="milestone-progress-bg">
+                <div class="milestone-progress-bar" style="width: 25%; background: linear-gradient(90deg, #10b981 0%, #34d399 100%);"></div>
+              </div>
+            </div>
+            <div class="milestone-row">
+              <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.9rem; color: #1e293b;">
+                <span>Sprint 30: Google AI Dashboard (Google)</span>
+                <span>10% Completed</span>
+              </div>
+              <div class="milestone-progress-bg">
+                <div class="milestone-progress-bar" style="width: 10%; background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);"></div>
+              </div>
+            </div>
+          </div>
+          <table class="pm-table" style="margin-top: 2rem;">
+            <thead>
+              <tr>
+                <th>Sprint ID</th>
+                <th>Client</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Team Size</th>
+                <th>Progress</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Sprint 27</strong></td><td>Vance Corp</td><td>Jun 24</td><td>Jul 8</td><td>4</td><td><span style="color:#10b981;font-weight:600;">85%</span></td></tr>
+              <tr><td><strong>Sprint 28</strong></td><td>Meta Platforms</td><td>Jul 1</td><td>Jul 15</td><td>6</td><td><span style="color:#2563eb;font-weight:600;">60%</span></td></tr>
+              <tr><td><strong>Sprint 29</strong></td><td>Tesla Motors</td><td>Jul 5</td><td>Jul 19</td><td>3</td><td><span style="color:#eab308;font-weight:600;">25%</span></td></tr>
+              <tr><td><strong>Sprint 30</strong></td><td>Google LLC</td><td>Jul 8</td><td>Jul 22</td><td>5</td><td><span style="color:#ef4444;font-weight:600;">10%</span></td></tr>
+            </tbody>
+          </table>
+          <button class="btn-green-cta-pill" style="margin-top: 1.5rem; padding: 0.6rem 1.5rem; font-size: 0.85rem;">Create New Sprint</button>
+
+          <h3 style="font-family: var(--font-title); font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-top: 2.5rem; margin-bottom: 0.75rem;">Sprint Visual Timeline</h3>
+          <div class="db-media-grid">
+            <div class="db-media-card">
+              <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=600&q=80" alt="Sprint 27">
+              <div class="db-media-card-body">
+                <span style="font-size: 0.7rem; font-weight: 700; color: #10b981;">85% COMPLETE</span>
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e293b;">Sprint 27 — Vance Corp</h4>
+                <p style="font-size: 0.75rem; color: #64748b;">Jun 24 – Jul 8 · 4 members</p>
+              </div>
+            </div>
+            <div class="db-media-card">
+              <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=600&q=80" alt="Sprint 28">
+              <div class="db-media-card-body">
+                <span style="font-size: 0.7rem; font-weight: 700; color: #2563eb;">60% COMPLETE</span>
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e293b;">Sprint 28 — Meta Platforms</h4>
+                <p style="font-size: 0.75rem; color: #64748b;">Jul 1 – Jul 15 · 6 members</p>
+              </div>
+            </div>
+            <div class="db-media-card">
+              <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=600&q=80" alt="Sprint 29">
+              <div class="db-media-card-body">
+                <span style="font-size: 0.7rem; font-weight: 700; color: #eab308;">25% COMPLETE</span>
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e293b;">Sprint 29 — Tesla Motors</h4>
+                <p style="font-size: 0.75rem; color: #64748b;">Jul 5 – Jul 19 · 3 members</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 5: Kanban Board -->
+        <div id="kanban-tab" class="db-tab-content">
+          <h2 style="font-family: var(--font-title); font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">Sprint Task Kanban Board</h2>
+          <p style="color: #64748b; margin-bottom: 1rem;">Drag tasks between stages to coordinate sprint completion. Updates log automatically in CRM database.</p>
+          
+          <div class="kanban-board-container">
+            <div class="kanban-col">
+              <div class="kanban-col-header">To Do</div>
+              <div class="kanban-cards-wrapper" id="todo-wrapper">
+                <div class="kanban-card-item" id="card-1" draggable="true">
+                  <h5 style="font-weight: 700; font-size: 0.85rem; color: #1e293b; margin-bottom: 0.25rem;">Draft Blog Article</h5>
+                  <p style="font-size: 0.75rem; color: #64748b;">Write article detailing our React design system architecture.</p>
+                </div>
+                <div class="kanban-card-item" id="card-2" draggable="true">
+                  <h5 style="font-weight: 700; font-size: 0.85rem; color: #1e293b; margin-bottom: 0.25rem;">QA Tesla UI Assets</h5>
+                  <p style="font-size: 0.75rem; color: #64748b;">Run security token sanity checks on portfolio mockups.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="kanban-col">
+              <div class="kanban-col-header">In Progress</div>
+              <div class="kanban-cards-wrapper" id="progress-wrapper">
+                <div class="kanban-card-item" id="card-3" draggable="true">
+                  <h5 style="font-weight: 700; font-size: 0.85rem; color: #1e293b; margin-bottom: 0.25rem;">Vance Brand Guidelines</h5>
+                  <p style="font-size: 0.75rem; color: #64748b;">Vectorizing typography packages and color palettes.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="kanban-col">
+              <div class="kanban-col-header">Done</div>
+              <div class="kanban-cards-wrapper" id="done-wrapper">
+                <div class="kanban-card-item" id="card-4" draggable="true">
+                  <h5 style="font-weight: 700; font-size: 0.85rem; color: #1e293b; margin-bottom: 0.25rem;">Initialize Git Node</h5>
+                  <p style="font-size: 0.75rem; color: #64748b;">Configured zero-trust cloud pipelines on Server Node-US-01.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 6: Team Assignment -->
+        <div id="team-tab" class="db-tab-content">
+          <h2 style="font-family: var(--font-title); font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem;">Team Allocation & Timesheets</h2>
+          <p style="color: #64748b; margin-bottom: 1.5rem;">Review task logs submitted by team members and approve billable creative sprint hours.</p>
+          
+          <table class="pm-table">
+            <thead>
+              <tr>
+                <th>Creative Operator</th>
+                <th>Assigned Task</th>
+                <th>Logged Hours</th>
+                <th>Billing Rate</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>John Doe</strong></td>
+                <td>Vance Redesign UI UX</td>
+                <td>34 Hours</td>
+                <td>$75/hr</td>
+                <td>
+                  <button class="btn-green-cta-pill" style="padding: 0.4rem 0.8rem; font-size: 0.7rem;">Approve Timesheet</button>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Elena Rostova</strong></td>
+                <td>3D Branding Assets Render</td>
+                <td>20 Hours</td>
+                <td>$90/hr</td>
+                <td>
+                  <button class="btn-green-cta-pill" style="padding: 0.4rem 0.8rem; font-size: 0.7rem;">Approve Timesheet</button>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>David Chen</strong></td>
+                <td>MetaVR Front-End Build</td>
+                <td>28 Hours</td>
+                <td>$80/hr</td>
+                <td>
+                  <button class="btn-green-cta-pill" style="padding: 0.4rem 0.8rem; font-size: 0.7rem;">Approve Timesheet</button>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Priya Sharma</strong></td>
+                <td>UX Research — Vance Corp</td>
+                <td>16 Hours</td>
+                <td>$70/hr</td>
+                <td>
+                  <button class="btn-green-cta-pill" style="padding: 0.4rem 0.8rem; font-size: 0.7rem;">Approve Timesheet</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem;">
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; text-align: center;">
+              <div style="font-size: 1.5rem; font-weight: 700; color: #eab308;">4</div>
+              <div style="font-size: 0.75rem; color: #64748b;">Pending Approvals</div>
+            </div>
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; text-align: center;">
+              <div style="font-size: 1.5rem; font-weight: 700; color: #2563eb;">98 hrs</div>
+              <div style="font-size: 0.75rem; color: #64748b;">Total Pending Hours</div>
+            </div>
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; text-align: center;">
+              <div style="font-size: 1.5rem; font-weight: 700; color: #10b981;">$7,420</div>
+              <div style="font-size: 0.75rem; color: #64748b;">Pending Payout Value</div>
+            </div>
+          </div>
+
+          <h3 style="font-family: var(--font-title); font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-top: 2.5rem; margin-bottom: 0.75rem;">Team Member Roster</h3>
+          <div class="db-media-grid">
+            <div class="db-media-card">
+              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80" alt="John Doe">
+              <div class="db-media-card-body">
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b;">John Doe</h4>
+                <p style="font-size: 0.8rem; color: #64748b;">34 hrs logged · Vance Redesign · $75/hr</p>
+                <button class="btn-green-cta-pill" style="padding: 0.4rem 0.8rem; font-size: 0.7rem; margin-top: 0.5rem; justify-content: center;">Approve Timesheet</button>
+              </div>
+            </div>
+            <div class="db-media-card">
+              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=600&q=80" alt="Elena Rostova">
+              <div class="db-media-card-body">
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b;">Elena Rostova</h4>
+                <p style="font-size: 0.8rem; color: #64748b;">20 hrs logged · 3D Branding · $90/hr</p>
+                <button class="btn-green-cta-pill" style="padding: 0.4rem 0.8rem; font-size: 0.7rem; margin-top: 0.5rem; justify-content: center;">Approve Timesheet</button>
+              </div>
+            </div>
+            <div class="db-media-card">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80" alt="David Chen">
+              <div class="db-media-card-body">
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b;">David Chen</h4>
+                <p style="font-size: 0.8rem; color: #64748b;">28 hrs logged · MetaVR Build · $80/hr</p>
+                <button class="btn-green-cta-pill" style="padding: 0.4rem 0.8rem; font-size: 0.7rem; margin-top: 0.5rem; justify-content: center;">Approve Timesheet</button>
+              </div>
+            </div>
+            <div class="db-media-card">
+              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80" alt="Priya Sharma">
+              <div class="db-media-card-body">
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b;">Priya Sharma</h4>
+                <p style="font-size: 0.8rem; color: #64748b;">16 hrs logged · UX Research · $70/hr</p>
+                <button class="btn-green-cta-pill" style="padding: 0.4rem 0.8rem; font-size: 0.7rem; margin-top: 0.5rem; justify-content: center;">Approve Timesheet</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 7: Blog Editor -->
+        <div id="blog-tab" class="db-tab-content">
+          <h2 style="font-family: var(--font-title); font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem;">Creative Insights Publisher</h2>
+          <p style="color: #64748b; margin-bottom: 1.5rem;">Write and publish articles, designer stories, or company publications to Stackly Blog.</p>
+          
+          <div class="db-two-column-card-grid" style="align-items: start;">
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+              <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                <label style="font-size: 0.8rem; font-weight: 600; color: #1e293b;">Article Title</label>
+                <input type="text" class="db-search-bar" placeholder="e.g. Redefining Modern UI Systems with HSL Gradients" style="width: 100%;">
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                <label style="font-size: 0.8rem; font-weight: 600; color: #1e293b;">Category</label>
+                <select class="db-search-bar" style="width: 100%; appearance: none; background-color: #f1f5f9;">
+                  <option>Design Insights</option>
+                  <option>Tech Developments</option>
+                  <option>Company News</option>
+                </select>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                <label style="font-size: 0.8rem; font-weight: 600; color: #1e293b;">Hero Image URL</label>
+                <input type="text" class="db-search-bar" placeholder="https://images.unsplash.com/..." style="width: 100%;">
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                <label style="font-size: 0.8rem; font-weight: 600; color: #1e293b;">Article Content</label>
+                <textarea class="db-search-bar" rows="8" placeholder="Draft your content in markdown format..." style="width: 100%; height: auto; resize: vertical;"></textarea>
+              </div>
+              <button class="btn-green-cta-pill" style="padding: 0.6rem; font-size: 0.85rem; justify-content: center; width: 100%;">Publish Draft</button>
+            </div>
+            <div class="db-media-card">
+              <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=600&q=80" alt="Blog hero preview">
+              <div class="db-media-card-body">
+                <span style="font-size: 0.7rem; font-weight: 700; color: #d97706; text-transform: uppercase;">Live Preview</span>
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b;">Modern UI Systems with HSL Gradients</h4>
+                <p style="font-size: 0.8rem; color: #64748b;">Hero image and title preview as it will appear on the Stackly blog homepage.</p>
+              </div>
+            </div>
+          </div>
+
+          <h3 style="font-family: var(--font-title); font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-top: 2.5rem; margin-bottom: 0.75rem;">Published Article Gallery</h3>
+          <div class="db-media-grid">
+            <div class="db-media-card">
+              <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80" alt="Zero-trust architecture">
+              <div class="db-media-card-body">
+                <span style="font-size: 0.7rem; font-weight: 700; color: #10b981; text-transform: uppercase;">Published</span>
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e293b;">Zero-Trust Dashboard Architecture</h4>
+                <p style="font-size: 0.75rem; color: #64748b;">Jul 5, 2026 · Tech Developments</p>
+              </div>
+            </div>
+            <div class="db-media-card">
+              <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" alt="Sprint recap">
+              <div class="db-media-card-body">
+                <span style="font-size: 0.7rem; font-weight: 700; color: #10b981; text-transform: uppercase;">Published</span>
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e293b;">Stackly Sprint 26 Recap</h4>
+                <p style="font-size: 0.75rem; color: #64748b;">Jul 3, 2026 · Company News</p>
+              </div>
+            </div>
+            <div class="db-media-card">
+              <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=600&q=80" alt="UI gradients draft">
+              <div class="db-media-card-body">
+                <span style="font-size: 0.7rem; font-weight: 700; color: #eab308; text-transform: uppercase;">Draft</span>
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e293b;">Modern UI Systems with HSL Gradients</h4>
+                <p style="font-size: 0.75rem; color: #64748b;">Jul 7, 2026 · Design Insights</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 2rem; background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+            <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Recent Drafts</h3>
+            <table class="pm-table" style="margin-top: 0;">
+              <thead>
+                <tr>
+                  <th>Article Title</th>
+                  <th>Category</th>
+                  <th>Last Edited</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Modern UI Systems with HSL Gradients</strong></td><td>Design Insights</td><td>Jul 7, 2026</td><td><span style="color:#eab308;font-weight:600;">Draft</span></td></tr>
+                <tr><td><strong>Zero-Trust Dashboard Architecture</strong></td><td>Tech Developments</td><td>Jul 5, 2026</td><td><span style="color:#10b981;font-weight:600;">Published</span></td></tr>
+                <tr><td><strong>Stackly Sprint 26 Recap</strong></td><td>Company News</td><td>Jul 3, 2026</td><td><span style="color:#10b981;font-weight:600;">Published</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 8: My Profile -->
+        <div id="profile-tab" class="db-tab-content">
+          <h2 style="font-family: var(--font-title); font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem;">Project Manager Profile Settings</h2>
+          
+          <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 2rem; max-width: 600px; display: flex; gap: 2rem; align-items: center;">
+            <img class="db-team-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=160&q=80" alt="Amila Perera" style="width: 80px; height: 80px;">
+            <div style="display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1;">
+              <h3 style="font-size: 1.25rem; font-weight: 700; color: #0f172a;" id="profile-name">Amila Perera</h3>
+              <p style="font-size: 0.85rem; color: #64748b;">Role: <strong>Senior Project Manager</strong></p>
+              <p style="font-size: 0.85rem; color: #64748b;">Authorized Email: <strong id="profile-email">pm@stackly.com</strong></p>
+              <p style="font-size: 0.75rem; color: #94a3b8;">Cryptokey: <code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">********-****-4xxx-yxxx-xxxxxxxxxxxx</code></p>
+            </div>
+          </div>
+          <div class="db-two-column-card-grid" style="max-width: 900px; margin-top: 2rem;">
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+              <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">PM Dashboard Stats</h3>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.85rem; color: #475569;">
+                <div style="display: flex; justify-content: space-between;"><span>Active Projects Managed</span><strong>12</strong></div>
+                <div style="display: flex; justify-content: space-between;"><span>Team Members</span><strong>8</strong></div>
+                <div style="display: flex; justify-content: space-between;"><span>Client Satisfaction</span><strong style="color:#10b981;">4.9 / 5</strong></div>
+                <div style="display: flex; justify-content: space-between;"><span>Sprints Completed (2026)</span><strong>27</strong></div>
+              </div>
+              <button class="btn-green-cta-pill" style="margin-top: 1rem; width: 100%; justify-content: center; padding: 0.5rem; font-size: 0.8rem;">Update Profile</button>
+            </div>
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+              <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Recent PM Actions</h3>
+              <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.8rem; color: #475569;">
+                <div>Approved 4 employee timesheets</div>
+                <div>Assigned Sprint 30 tasks to Google team</div>
+                <div>Published blog article on UI systems</div>
+                <div>Scheduled client call with Alice Vance</div>
+                <div>Reviewed 2 portfolio submissions</div>
+              </div>
+              <button class="btn-add-cart" style="margin-top: 1rem; width: 100%; justify-content: center; padding: 0.5rem; font-size: 0.8rem;">View Full Activity Log</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 9: Settings -->
+        <div id="settings-tab" class="db-tab-content">
+          <h2 style="font-family: var(--font-title); font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem;">Console Preferences & Settings</h2>
+          <p style="color: #64748b; margin-bottom: 1.5rem;">Customize your dashboard layout, notification alerts, and security credentials.</p>
+          
+          <div class="db-two-column-card-grid" style="max-width: 900px; margin-top: 1.5rem;">
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+              <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b;">Notification Settings</h3>
+              
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <h4 style="font-size: 0.9rem; font-weight: 600; color: #334155; margin-bottom: 0.15rem;">Email Notifications</h4>
+                  <p style="font-size: 0.75rem; color: #64748b;">Receive updates on project sprints and approvals</p>
+                </div>
+                <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #d97706;">
+              </div>
+              
+              <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #f1f5f9; padding-top: 1rem;">
+                <div>
+                  <h4 style="font-size: 0.9rem; font-weight: 600; color: #334155; margin-bottom: 0.15rem;">Activity Summary Digests</h4>
+                  <p style="font-size: 0.75rem; color: #64748b;">Weekly reports of logged timesheets and creative submissions</p>
+                </div>
+                <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #d97706;">
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #f1f5f9; padding-top: 1rem;">
+                <div>
+                  <h4 style="font-size: 0.9rem; font-weight: 600; color: #334155; margin-bottom: 0.15rem;">Zero-Trust Alerts</h4>
+                  <p style="font-size: 0.75rem; color: #64748b;">High-priority alerts for new session logins</p>
+                </div>
+                <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #d97706;">
+              </div>
+              
+              <button class="btn-green-cta-pill" style="padding: 0.5rem 1rem; font-size: 0.8rem; justify-content: center; margin-top: 0.5rem;" onclick="window.showToast('Notification settings saved successfully.', 'success')">Save Preferences</button>
+            </div>
+
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Update Password</h3>
+              <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                <label style="font-size: 0.8rem; font-weight: 600; color: #475569;">Current Password</label>
+                <input type="password" class="db-search-bar" placeholder="••••••••" style="width: 100%;">
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                <label style="font-size: 0.8rem; font-weight: 600; color: #475569;">New Password</label>
+                <input type="password" class="db-search-bar" placeholder="Min. 8 characters" style="width: 100%;">
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                <label style="font-size: 0.8rem; font-weight: 600; color: #475569;">Confirm Password</label>
+                <input type="password" class="db-search-bar" placeholder="Confirm new password" style="width: 100%;">
+              </div>
+              <button class="btn-add-cart" style="padding: 0.5rem 1rem; font-size: 0.8rem; justify-content: center; margin-top: 0.5rem;" onclick="window.showToast('Credentials updated successfully.', 'success')">Change Credentials</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/dashboard.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Set correct email in headers
+      const savedUser = sessionStorage.getItem('auth_user') || 'pm@stackly.com';
+      document.getElementById('header-user-email').textContent = savedUser.split('@')[0];
+      
+      const profileEmail = document.getElementById('profile-email');
+      if (profileEmail) profileEmail.textContent = savedUser;
+      
+      const profileName = document.getElementById('profile-name');
+      if (profileName) {
+        // extract name from email
+        const parts = savedUser.split('@')[0].split('.');
+        const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1);
+        profileName.textContent = parts.map(capitalize).join(' ');
+      }
+
+      // Handle sidebar menu tab changes
+      const menuItems = document.querySelectorAll('.sidebar-menu-item');
+      const tabContents = document.querySelectorAll('.db-tab-content');
+      const breadcrumbCurrent = document.getElementById('breadcrumb-current');
+
+      menuItems.forEach(item => {
+        const link = item.querySelector('a');
+        if (!link) return;
+        const targetId = link.getAttribute('href');
+        
+        if (targetId && targetId.startsWith('#') && targetId !== '#logout') {
+          item.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Toggle active menu class
+            menuItems.forEach(mi => mi.classList.remove('active'));
+            item.classList.add('active');
+
+            // Hide/Show correct panels
+            tabContents.forEach(content => content.classList.remove('active'));
+            const targetContent = document.querySelector(targetId);
+            if (targetContent) targetContent.classList.add('active');
+
+            // Update breadcrumb
+            const tabName = item.querySelector('.sidebar-collapsed-text').textContent;
+            breadcrumbCurrent.textContent = tabName;
+
+            // Close mobile sidebar if open
+            const container = document.querySelector('.dashboard-container');
+            if (container) {
+              container.classList.remove('sidebar-open');
+            }
+          });
+        }
+      });
+
+      // Handle Logout
+      const logoutItem = document.getElementById('logout-item');
+      if (logoutItem) {
+        logoutItem.addEventListener('click', (e) => {
+          e.preventDefault();
+          sessionStorage.clear();
+          window.showToast('Terminating zero-trust session...', 'info');
+          setTimeout(() => {
+            window.location.href = '../authentication/login.html';
+          }, 1200);
+        });
+      }
+
+    });
+  </script>
+</body>
+</html>

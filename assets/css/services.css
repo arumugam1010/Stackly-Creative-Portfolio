@@ -1,0 +1,95 @@
+/* Services Page custom CSS */
+
+.services-full-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 2.5rem;
+}
+
+.service-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.service-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.service-card-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  background: var(--bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--primary-blue);
+  transition: var(--transition-fast);
+}
+
+.service-card:hover .service-card-icon {
+  background: var(--primary-blue);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.service-card:nth-child(even):hover .service-card-icon {
+  background: var(--primary-purple);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+
+.service-card-title {
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.service-features-list {
+  list-style: none;
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.service-features-list li::before {
+  content: '✦';
+  color: var(--primary-blue);
+  margin-right: 0.5rem;
+}
+
+.service-tech-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  margin-top: auto;
+}
+
+.tech-badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.service-card-actions {
+  display: flex;
+  gap: 1rem;
+}
+.service-card-actions .btn-neon, .service-card-actions .btn-outline {
+  padding: 0.6rem 1rem;
+  font-size: 0.8rem;
+  border-radius: 20px;
+}

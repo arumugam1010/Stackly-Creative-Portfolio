@@ -1,0 +1,5 @@
+@import url('subpages.css');
+/* Page specific modifications */
+.event-item-row {
+  margin-bottom: 2rem;
+}

@@ -1,0 +1,30 @@
+/* Industries styling */
+.industries-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 2.5rem;
+}
+
+.industry-card {
+  padding: 1.8rem 2rem 2.2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.industry-icon {
+  font-size: 3rem;
+  margin-bottom: 1.25rem;
+  color: var(--primary-cyan);
+}
+
+.industry-title {
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.industry-card:hover .industry-icon {
+  transform: scale(1.1);
+  text-shadow: var(--shadow-neon-cyan);
+}

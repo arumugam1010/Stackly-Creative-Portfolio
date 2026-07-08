@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Access | Stackly</title>
+  <link rel="stylesheet" href="../assets/css/global.css">
+  <link rel="stylesheet" href="../assets/css/authentication.css">
+</head>
+
+<body>
+
+  <div class="auth-page-container" id="auth-container">
+    <div class="forms-container">
+      <div class="signin-signup" style="max-height: 95vh; overflow-y: auto; overflow-x: hidden; padding: 10px 0;">
+
+        <!-- Sign In Form (Corporate Portal) -->
+        <form id="login-form" class="sign-in-form" style="padding: 0 2rem;">
+          <!-- Brand Logo -->
+          <div style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center;">
+            <a href="../index.html" class="brand-logo"
+              style="display: flex; align-items: center; text-decoration: none;">
+              <img src="../assets/images/logo-stackly.png" alt="Stackly Logo"
+                style="height: 36px; width: auto; filter: brightness(0); display: block;">
+            </a>
+          </div>
+
+          <h2 class="auth-title"
+            style="font-size: 1.6rem; font-weight: 700; margin-bottom: 0.25rem; text-align: left; color: var(--text-primary); font-family: var(--font-title);">
+            Corporate Portal</h2>
+          <p class="auth-subtitle"
+            style="font-size: 0.8rem; color: var(--text-secondary); text-align: left; margin-bottom: 1rem; line-height: 1.4;">
+            Verify cryptographic credentials to access your console.</p>
+
+          <!-- Role Switching Toggle Bar -->
+          <div class="role-toggle-bar"
+            style="display: flex; background: rgba(15, 23, 42, 0.04); border: 1px solid var(--border-color); border-radius: 10px; padding: 2px; margin-bottom: 1rem;">
+            <button type="button" class="role-toggle-btn" data-role="admin"
+              style="flex: 1; padding: 0.45rem 0.3rem; border: none; border-radius: 6px; background: transparent; color: var(--text-secondary); font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.8rem;">Administrator</button>
+            <button type="button" class="role-toggle-btn" data-role="pm"
+              style="flex: 1; padding: 0.45rem 0.3rem; border: none; border-radius: 6px; background: transparent; color: var(--text-secondary); font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.8rem;">Project
+              Manager</button>
+            <button type="button" class="role-toggle-btn active" data-role="employee"
+              style="flex: 1; padding: 0.45rem 0.3rem; border: none; border-radius: 6px; background: #2563eb; color: #ffffff; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.8rem;">Employee</button>
+          </div>
+          <input type="hidden" id="login-role" value="employee">
+
+          <!-- Corporate Email Address -->
+          <div style="margin-bottom: 0.8rem; text-align: left;">
+            <label
+              style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; font-family: var(--font-title);">Corporate
+              Email Address</label>
+            <input type="email" id="login-email" required placeholder="Enter corporate email address"
+              style="width: 100%; padding: 0.55rem 0.8rem; background: rgba(255, 255, 255, 0.6); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); outline: none; font-size: 0.85rem; transition: border-color 0.2s;"
+              onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='var(--border-color)'">
+          </div>
+
+          <!-- Access Cryptokey -->
+          <div style="margin-bottom: 0.8rem; text-align: left; position: relative;">
+            <label
+              style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; font-family: var(--font-title);">Access
+              Cryptokey</label>
+            <div style="position: relative; display: flex; align-items: center; width: 100%;">
+              <input type="password" id="login-password" required placeholder="Enter cryptokey"
+                style="width: 100%; padding: 0.55rem 2rem 0.55rem 0.8rem; background: rgba(255, 255, 255, 0.6); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); outline: none; font-size: 0.85rem; transition: border-color 0.2s;"
+                onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='var(--border-color)'">
+              <span class="password-toggle-eye"
+                style="position: absolute; right: 0.8rem; cursor: pointer; color: var(--text-muted); font-size: 1rem; user-select: none;">🔒</span>
+            </div>
+          </div>
+
+          <!-- Keep Active and Forgot Key -->
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; margin-bottom: 1rem;">
+            <label
+              style="display: flex; align-items: center; gap: 0.3rem; cursor: pointer; color: var(--text-primary); user-select: none;">
+              <input type="checkbox"
+                style="width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--border-color); background: transparent; cursor: pointer; accent-color: #2563eb;">
+              Remember me
+            </label>
+            <a href="forgot-password.html" style="color: #2563eb; text-decoration: none; font-weight: 600;">Forgot
+              password?</a>
+          </div>
+
+          <!-- Initialize Access Button -->
+          <button type="submit" class="btn-neon ripple-btn"
+            style="width: 100%; justify-content: center; background: linear-gradient(90deg, #0052d4 0%, #4364f7 50%, #6fb1fc 100%); border: none; border-radius: 20px; padding: 0.6rem; color: #ffffff; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; box-shadow: 0 4px 12px rgba(67, 100, 247, 0.2);">
+            Initialize Access <span style="font-size: 0.9rem; line-height: 1;">→</span>
+          </button>
+
+          <!-- Back to Home -->
+          <a href="../index.html"
+            style="display: flex; align-items: center; justify-content: center; gap: 0.25rem; font-size: 0.8rem; font-weight: 600; color: #4b5563; text-decoration: none; margin-top: 1rem; transition: color 0.2s;"
+            onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='#4b5563'">
+            ← Back to Home
+          </a>
+        </form>
+
+        <!-- Sign Up Form (Enrol Credentials) -->
+        <form id="register-form" class="sign-up-form" style="padding: 0 2rem;">
+          <!-- Brand Logo -->
+          <div style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center;">
+            <a href="../index.html" class="brand-logo"
+              style="display: flex; align-items: center; text-decoration: none;">
+              <img src="../assets/images/logo-stackly.png" alt="Stackly Logo"
+                style="height: 36px; width: auto; filter: brightness(0); display: block;">
+            </a>
+          </div>
+
+          <h2 class="auth-title"
+            style="font-size: 1.6rem; font-weight: 700; margin-bottom: 0.25rem; text-align: left; color: var(--text-primary); font-family: var(--font-title);">
+            Enrol Credentials</h2>
+          <p class="auth-subtitle"
+            style="font-size: 0.8rem; color: var(--text-secondary); text-align: left; margin-bottom: 1rem; line-height: 1.4;">
+            Create a cryptographic account with authorization groups.</p>
+
+          <!-- Role Selection Cards Grid -->
+          <div style="display: block; text-align: left; margin-bottom: 1rem;">
+            <label
+              style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem; font-family: var(--font-title);">I
+              want to join as:</label>
+            <div class="role-cards-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+
+              <!-- Card 1 (Employee) -->
+              <div class="role-card active" data-role="employee"
+                style="border: 1px solid #2563eb; background: rgba(37, 99, 235, 0.04); border-radius: 10px; padding: 0.5rem 0.25rem; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(37,99,235,0.05);">
+                <div
+                  style="width: 24px; height: 24px; background: rgba(37, 99, 235, 0.1); border-radius: 6px; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.3rem;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <strong
+                  style="display: block; font-size: 0.75rem; color: var(--text-primary); margin-bottom: 0.1rem;">Employee</strong>
+                <span style="display: block; font-size: 0.6rem; color: var(--text-secondary);">Join tasks</span>
+              </div>
+
+              <!-- Card 2 (PM) -->
+              <div class="role-card" data-role="pm"
+                style="border: 1px solid var(--border-color); background: transparent; border-radius: 10px; padding: 0.5rem 0.25rem; text-align: center; cursor: pointer; transition: all 0.3s ease;">
+                <div
+                  style="width: 24px; height: 24px; background: rgba(147, 51, 234, 0.1); border-radius: 6px; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.3rem;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                </div>
+                <strong
+                  style="display: block; font-size: 0.75rem; color: var(--text-primary); margin-bottom: 0.1rem;">Project
+                  Manager</strong>
+                <span style="display: block; font-size: 0.65rem; color: var(--text-secondary);">Host sprints</span>
+              </div>
+
+              <!-- Card 3 (Admin) -->
+              <div class="role-card" data-role="admin"
+                style="border: 1px solid var(--border-color); background: transparent; border-radius: 10px; padding: 0.5rem 0.25rem; text-align: center; cursor: pointer; transition: all 0.3s ease;">
+                <div
+                  style="width: 24px; height: 24px; background: rgba(34, 197, 94, 0.1); border-radius: 6px; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.3rem;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path
+                      d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z">
+                    </path>
+                  </svg>
+                </div>
+                <strong
+                  style="display: block; font-size: 0.75rem; color: var(--text-primary); margin-bottom: 0.1rem;">Administrator</strong>
+                <span style="display: block; font-size: 0.6rem; color: var(--text-secondary);">Full access</span>
+              </div>
+
+            </div>
+            <input type="hidden" id="register-role" value="employee">
+          </div>
+
+          <!-- Name Fields Grid -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <div style="text-align: left;">
+              <label
+                style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; font-family: var(--font-title);">First
+                Name</label>
+              <input type="text" id="register-firstname" placeholder="John"
+                style="width: 100%; padding: 0.55rem 0.8rem; background: rgba(255, 255, 255, 0.6); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); outline: none; font-size: 0.85rem; transition: border-color 0.2s;"
+                onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='var(--border-color)'">
+            </div>
+            <div style="text-align: left;">
+              <label
+                style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; font-family: var(--font-title);">Last
+                Name</label>
+              <input type="text" id="register-lastname" placeholder="Doe"
+                style="width: 100%; padding: 0.55rem 0.8rem; background: rgba(255, 255, 255, 0.6); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); outline: none; font-size: 0.85rem; transition: border-color 0.2s;"
+                onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='var(--border-color)'">
+            </div>
+          </div>
+
+          <!-- Email Address -->
+          <div style="margin-bottom: 0.75rem; text-align: left;">
+            <label
+              style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; font-family: var(--font-title);">Email
+              Address</label>
+            <input type="email" id="register-email" required placeholder="name@company.com"
+              style="width: 100%; padding: 0.55rem 0.8rem; background: rgba(255, 255, 255, 0.6); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); outline: none; font-size: 0.85rem; transition: border-color 0.2s;"
+              onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='var(--border-color)'">
+          </div>
+
+          <!-- Define Cryptokey -->
+          <div style="margin-bottom: 0.75rem; text-align: left; position: relative;">
+            <label
+              style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; font-family: var(--font-title);">Define
+              Cryptokey</label>
+            <div style="position: relative; display: flex; align-items: center; width: 100%;">
+              <input type="password" id="register-password" required placeholder="Create a password"
+                style="width: 100%; padding: 0.55rem 2rem 0.55rem 0.8rem; background: rgba(255, 255, 255, 0.6); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); outline: none; font-size: 0.85rem; transition: border-color 0.2s;"
+                onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='var(--border-color)'">
+              <span class="password-toggle-eye"
+                style="position: absolute; right: 0.8rem; cursor: pointer; color: var(--text-muted); font-size: 1rem; user-select: none;">🔒</span>
+            </div>
+          </div>
+
+          <!-- Password Strength Meter -->
+          <div style="text-align: left; margin-bottom: 0.75rem;">
+            <div
+              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem; font-size: 0.75rem;">
+              <span style="color: var(--text-secondary);">Password strength: <strong id="strength-text"
+                  style="color: var(--text-secondary);">None</strong></span>
+            </div>
+            <div class="strength-meter-container"
+              style="height: 4px; width: 100%; background: rgba(15, 23, 42, 0.05); border-radius: 3px; overflow: hidden;">
+              <div class="strength-meter-bar" id="strength-bar"
+                style="height: 100%; width: 0%; background: #ef4444; transition: all 0.3s ease;"></div>
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div style="margin-bottom: 1rem; text-align: left; position: relative;">
+            <label
+              style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; font-family: var(--font-title);">Confirm
+              Password</label>
+            <div style="position: relative; display: flex; align-items: center; width: 100%;">
+              <input type="password" id="register-confirm-password" required placeholder="Confirm your password"
+                style="width: 100%; padding: 0.55rem 2rem 0.55rem 0.8rem; background: rgba(255, 255, 255, 0.6); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); outline: none; font-size: 0.85rem; transition: border-color 0.2s;"
+                onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='var(--border-color)'">
+              <span class="password-toggle-eye"
+                style="position: absolute; right: 0.8rem; cursor: pointer; color: var(--text-muted); font-size: 1rem; user-select: none;">🔒</span>
+            </div>
+          </div>
+
+          <!-- Initiate Verification Button -->
+          <button type="submit" class="btn-neon ripple-btn"
+            style="width: 100%; justify-content: center; background: linear-gradient(90deg, #0052d4 0%, #4364f7 50%, #6fb1fc 100%); border: none; border-radius: 20px; padding: 0.6rem; color: #ffffff; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; box-shadow: 0 4px 12px rgba(67, 100, 247, 0.2);">
+            Initiate Verification <span style="font-size: 0.9rem; line-height: 1;">→</span>
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- Side Panels Slide Animation Container -->
+    <div class="panels-container">
+      <!-- Left Panel (Login Side) -->
+      <div class="panel left-panel" style="padding: 2rem 10% 1.5rem 8%;">
+        <div class="content">
+          <h3 style="font-size: 1.4rem;">New operator?</h3>
+          <p style="margin-top: 0.3rem; font-size: 0.85rem;">Enrol your security credentials to access our zero-trust
+            cloud console.</p>
+          <button class="btn transparent" id="sign-up-btn"
+            style="border: 2px solid #fff; background: transparent; color: #fff; cursor: pointer; width: 110px; height: 36px; border-radius: 18px; font-size: 0.85rem; margin-top: 1rem;">Register</button>
+        </div>
+        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80"
+          class="image" alt="Code screens workspace" style="max-width: 260px; margin-top: 1rem;">
+      </div>
+
+      <!-- Right Panel (Register Side) -->
+      <div class="panel right-panel" style="padding: 2rem 8% 1.5rem 10%;">
+        <div class="content">
+          <h3 style="font-size: 1.4rem;">Already verified?</h3>
+          <p style="margin-top: 0.3rem; font-size: 0.85rem;">Access your database nodes and active server tracks
+            immediately.</p>
+          <button class="btn transparent" id="sign-in-btn"
+            style="border: 2px solid #fff; background: transparent; color: #fff; cursor: pointer; width: 110px; height: 36px; border-radius: 18px; font-size: 0.85rem; margin-top: 1rem;">Sign
+            in</button>
+        </div>
+        <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80"
+          class="image" alt="Cyber telemetry dashboard" style="max-width: 260px; margin-top: 1rem;">
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script>
+    // Tab toggling switcher handler (login form)
+    const toggleBtns = document.querySelectorAll('.role-toggle-btn');
+    const roleInput = document.getElementById('login-role');
+    toggleBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        toggleBtns.forEach(b => {
+          b.classList.remove('active');
+          b.style.background = 'transparent';
+          b.style.color = 'var(--text-secondary)';
+        });
+        btn.classList.add('active');
+        btn.style.background = '#2563eb';
+        btn.style.color = '#ffffff';
+        roleInput.value = btn.getAttribute('data-role');
+      });
+    });
+
+    // Role selection grid cards handler (register form)
+    const cards = document.querySelectorAll('.role-card');
+    const registerRoleInput = document.getElementById('register-role');
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        cards.forEach(c => {
+          c.classList.remove('active');
+          c.style.border = '1px solid var(--border-color)';
+          c.style.background = 'transparent';
+          c.style.boxShadow = 'none';
+        });
+        card.classList.add('active');
+        card.style.border = '1px solid #2563eb';
+        card.style.background = 'rgba(37, 99, 235, 0.04)';
+        card.style.boxShadow = '0 4px 12px rgba(37,99,235,0.05)';
+        registerRoleInput.value = card.getAttribute('data-role');
+      });
+    });
+
+    // Password strength text and bar sync handler (register form)
+    const passwordInput = document.getElementById('register-password');
+    const bar = document.getElementById('strength-bar');
+    const text = document.getElementById('strength-text');
+    if (passwordInput && bar && text) {
+      passwordInput.addEventListener('input', () => {
+        const val = passwordInput.value;
+        if (val.length === 0) {
+          bar.style.width = '0%';
+          bar.style.background = '#ef4444';
+          text.textContent = 'None';
+          text.style.color = 'var(--text-secondary)';
+          return;
+        }
+        let score = 0;
+        if (val.length >= 8) score++;
+        if (/[A-Z]/.test(val)) score++;
+        if (/[0-9]/.test(val)) score++;
+        if (/[^A-Za-z0-9]/.test(val)) score++;
+
+        if (score <= 1) {
+          bar.style.width = '25%';
+          bar.style.background = '#ef4444';
+          text.textContent = 'Weak';
+          text.style.color = '#ef4444';
+        } else if (score === 2 || score === 3) {
+          bar.style.width = '60%';
+          bar.style.background = '#eab308';
+          text.textContent = 'Medium';
+          text.style.color = '#eab308';
+        } else if (score >= 4) {
+          bar.style.width = '100%';
+          bar.style.background = '#22c55e';
+          text.textContent = 'Strong';
+          text.style.color = '#22c55e';
+        }
+      });
+    }
+
+    // Sliding Panel animation handler
+    const container = document.querySelector("#auth-container");
+    const signUpBtn = document.querySelector("#sign-up-btn");
+    const signInBtn = document.querySelector("#sign-in-btn");
+    const switchReg = document.querySelector(".switch-to-register");
+    const switchLogin = document.querySelector(".switch-to-login");
+
+    if (signUpBtn && signInBtn && container) {
+      signUpBtn.addEventListener("click", () => {
+        container.classList.add("sign-up-mode");
+      });
+      signInBtn.addEventListener("click", () => {
+        container.classList.remove("sign-up-mode");
+      });
+    }
+    if (switchReg && container) {
+      switchReg.addEventListener("click", (e) => {
+        e.preventDefault();
+        container.classList.add("sign-up-mode");
+      });
+    }
+    if (switchLogin && container) {
+      switchLogin.addEventListener("click", (e) => {
+        e.preventDefault();
+        container.classList.remove("sign-up-mode");
+      });
+    }
+
+    // Real-time name input digit filter (no numbers allowed)
+    const firstNameInput = document.getElementById('register-firstname');
+    const lastNameInput = document.getElementById('register-lastname');
+    if (firstNameInput) {
+      firstNameInput.addEventListener('input', () => {
+        firstNameInput.value = firstNameInput.value.replace(/[0-9]/g, '');
+      });
+    }
+    if (lastNameInput) {
+      lastNameInput.addEventListener('input', () => {
+        lastNameInput.value = lastNameInput.value.replace(/[0-9]/g, '');
+      });
+    }
+  </script>
+</body>
+
+</html>
