@@ -8,10 +8,50 @@
   justify-content: center;
   overflow: hidden;
   padding: 0;
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.6) 0%, rgba(15, 23, 42, 0.3) 100%), url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1920&q=80');
+  background-color: var(--bg-dark);
+}
+
+.hero-slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.hero-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+.hero-slide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.75) 0%, rgba(15, 23, 42, 0.45) 100%);
+  z-index: 2;
+}
+
+.hero-slide.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 3;
 }
 
 #bg-canvas {
@@ -20,7 +60,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 4;
   pointer-events: none;
   opacity: 0.15;
 }
@@ -32,7 +72,7 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(180deg, transparent 70%, var(--bg-dark) 100%);
-  z-index: 2;
+  z-index: 4;
   pointer-events: none;
 }
 
@@ -44,6 +84,7 @@
   width: 100%;
   max-width: 1300px;
   padding: 140px 2rem 60px 2rem;
+  position: relative;
   z-index: 5;
 }
 
@@ -58,13 +99,13 @@
 
 .hero-title {
   font-family: var(--font-title);
-  font-size: 4.8rem;
+  font-size: 4.5rem;
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -1px;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   color: #ffffff;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .inline-hero-img {
@@ -169,6 +210,124 @@
   justify-content: flex-start;
   gap: 1.5rem;
   flex-wrap: wrap;
+}
+
+/* Slider Controls & Active transitions */
+.slider-controls {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  z-index: 10;
+}
+
+.slider-control-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: 1.2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.slider-control-btn:hover {
+  background: var(--primary-cyan);
+  border-color: var(--primary-cyan);
+  color: var(--bg-dark);
+  box-shadow: var(--shadow-neon-cyan);
+  transform: scale(1.05);
+}
+
+.slider-dots {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.slider-dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.slider-dots .dot:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.slider-dots .dot.active {
+  background: var(--primary-cyan);
+  transform: scale(1.25);
+  box-shadow: var(--shadow-neon-cyan);
+}
+
+.hero-image-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  aspect-ratio: 4 / 3;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+}
+
+.hero-slide.active .hero-image-wrapper {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.hero-slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.hero-image-wrapper:hover .hero-slide-img {
+  transform: scale(1.05);
+}
+
+.hero-slide .hero-title,
+.hero-slide .hero-tagline,
+.hero-slide .hero-ctas {
+  transform: translateY(30px);
+  opacity: 0;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+}
+
+.hero-slide.active .hero-title {
+  transform: translateY(0);
+  opacity: 1;
+  transition-delay: 0.1s;
+}
+
+.hero-slide.active .hero-tagline {
+  transform: translateY(0);
+  opacity: 1;
+  transition-delay: 0.25s;
+}
+
+.hero-slide.active .hero-ctas {
+  transform: translateY(0);
+  opacity: 1;
+  transition-delay: 0.4s;
 }
 
 .scroll-indicator {

@@ -24,6 +24,53 @@ function initDashboardButtonRedirects() {
   });
 }
 
+// Helper to toggle mobile sidebar scroll lock and blur effect
+function toggleMobileScrollLock(isOpen) {
+  const container = document.querySelector('.dashboard-container');
+  const dbMain = document.querySelector('.db-main');
+  const overlay = document.querySelector('.db-sidebar-overlay');
+  
+  if (container) {
+    if (isOpen) {
+      container.classList.add('sidebar-open');
+    } else {
+      container.classList.remove('sidebar-open');
+    }
+  }
+
+  if (overlay) {
+    if (isOpen) {
+      overlay.classList.add('open');
+    } else {
+      overlay.classList.remove('open');
+    }
+  }
+  
+  if (dbMain) {
+    dbMain.style.filter = isOpen ? 'blur(6px)' : 'none';
+    dbMain.style.pointerEvents = isOpen ? 'none' : 'auto';
+    dbMain.style.transition = 'filter 0.3s ease';
+  }
+
+  if (isOpen) {
+    document.documentElement.classList.add('sidebar-open-lock');
+    document.body.classList.add('sidebar-open-lock');
+    // Lock scrolling on mobile Safari/Chrome instantly via inline styling
+    document.body.style.overflow = 'hidden';
+    document.body.style.height = '100vh';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+  } else {
+    document.documentElement.classList.remove('sidebar-open-lock');
+    document.body.classList.remove('sidebar-open-lock');
+    // Restore styling
+    document.body.style.overflow = '';
+    document.body.style.height = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+  }
+}
+
 // Collapsible sidebar
 function initSidebarToggle() {
   const container = document.querySelector('.dashboard-container');
@@ -38,10 +85,7 @@ function initSidebarToggle() {
     
     // Close on overlay click
     overlay.addEventListener('click', () => {
-      container.classList.remove('sidebar-open');
-      overlay.classList.remove('open');
-      document.documentElement.classList.remove('sidebar-open-lock');
-      document.body.classList.remove('sidebar-open-lock');
+      toggleMobileScrollLock(false);
     });
   }
 
@@ -52,13 +96,7 @@ function initSidebarToggle() {
       if (window.innerWidth <= 1000) {
         e.preventDefault();
         e.stopPropagation();
-        container.classList.remove('sidebar-open');
-        const overlay = document.querySelector('.db-sidebar-overlay');
-        if (overlay) {
-          overlay.classList.remove('open');
-        }
-        document.documentElement.classList.remove('sidebar-open-lock');
-        document.body.classList.remove('sidebar-open-lock');
+        toggleMobileScrollLock(false);
         return;
       }
 
@@ -84,21 +122,8 @@ function initSidebarToggle() {
     mobileToggleBtn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      container.classList.toggle('sidebar-open');
-      const isOpen = container.classList.contains('sidebar-open');
-      
-      const overlay = document.querySelector('.db-sidebar-overlay');
-      if (overlay) {
-        overlay.classList.toggle('open', isOpen);
-      }
-      
-      if (isOpen) {
-        document.documentElement.classList.add('sidebar-open-lock');
-        document.body.classList.add('sidebar-open-lock');
-      } else {
-        document.documentElement.classList.remove('sidebar-open-lock');
-        document.body.classList.remove('sidebar-open-lock');
-      }
+      const willOpen = !container.classList.contains('sidebar-open');
+      toggleMobileScrollLock(willOpen);
     });
   }
 
@@ -107,13 +132,7 @@ function initSidebarToggle() {
     if (container.classList.contains('sidebar-open')) {
       const sidebar = document.querySelector('.db-sidebar');
       if (sidebar && !sidebar.contains(e.target) && e.target !== mobileToggleBtn && !mobileToggleBtn.contains(e.target)) {
-        container.classList.remove('sidebar-open');
-        const overlay = document.querySelector('.db-sidebar-overlay');
-        if (overlay) {
-          overlay.classList.remove('open');
-        }
-        document.documentElement.classList.remove('sidebar-open-lock');
-        document.body.classList.remove('sidebar-open-lock');
+        toggleMobileScrollLock(false);
       }
     }
   });
@@ -121,13 +140,7 @@ function initSidebarToggle() {
   // Close sidebar drawer, remove backdrop blur overlay, and unlock scroll when switching tabs
   document.querySelectorAll('.sidebar-menu-item a').forEach(link => {
     link.addEventListener('click', () => {
-      container.classList.remove('sidebar-open');
-      const overlay = document.querySelector('.db-sidebar-overlay');
-      if (overlay) {
-        overlay.classList.remove('open');
-      }
-      document.documentElement.classList.remove('sidebar-open-lock');
-      document.body.classList.remove('sidebar-open-lock');
+      toggleMobileScrollLock(false);
     });
   });
 }

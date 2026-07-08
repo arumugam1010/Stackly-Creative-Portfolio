@@ -89,33 +89,90 @@
   <section class="hero-section">
     <canvas id="bg-canvas"></canvas>
     <div class="hero-overlay"></div>
-    <div class="hero-container">
-      <div class="hero-left reveal active">
-        <h1 class="hero-title" style="text-transform: uppercase;">
-          The Stack Where<br>
-          Innovation Meets<br>
-          Modern Systems.
-        </h1>
-        <div class="hero-ctas">
-          <a href="pages/services.html" class="btn-white-pill ripple-btn">Book a consultation</a>
+    
+    <!-- Hero Slider -->
+    <div class="hero-slider">
+      <!-- Slide 1 -->
+      <div class="hero-slide active" style="background-image: url('assets/images/hero_bg_1.png');">
+        <div class="hero-container">
+          <div class="hero-left">
+            <h1 class="hero-title" style="text-transform: uppercase;">
+              Engineering The<br>Next Digital<br>Frontier
+            </h1>
+            <p class="hero-tagline" style="font-size: 1.2rem; color: rgba(255, 255, 255, 0.7); margin-bottom: 2.5rem; max-width: 600px; line-height: 1.6;">
+              We design and deploy modern software architectures, quantum-grade security, and robust high-scale infrastructure tailored for global enterprises.
+            </p>
+            <div class="hero-ctas">
+              <a href="pages/services.html" class="btn-white-pill ripple-btn">Book a consultation</a>
+              <a href="pages/portfolio.html" class="btn-neon ripple-btn" style="padding: 0.8rem 1.8rem; font-size: 0.9rem;">View Portfolio</a>
+            </div>
+          </div>
+          <div class="hero-right">
+            <div class="hero-image-wrapper">
+              <img src="assets/images/hero_slide_1.png" alt="Software Architectures" class="hero-slide-img">
+            </div>
+          </div>
         </div>
       </div>
-      <div class="hero-right reveal active">
-        <div class="hero-floating-card">
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">⭐</span>
-            <span style="font-weight: 700; color: var(--text-primary); font-family: var(--font-title); font-size: 1.1rem;">4.9 Rating</span>
+      
+      <!-- Slide 2 -->
+      <div class="hero-slide" style="background-image: url('assets/images/hero_bg_2.png');">
+        <div class="hero-container">
+          <div class="hero-left">
+            <h1 class="hero-title" style="text-transform: uppercase;">
+              Cognitive AI &<br>Neural Systems
+            </h1>
+            <p class="hero-tagline" style="font-size: 1.2rem; color: rgba(255, 255, 255, 0.7); margin-bottom: 2.5rem; max-width: 600px; line-height: 1.6;">
+              Empower your business workflows with advanced neural models, automated predictive analysis, and secure machine learning pipelines.
+            </p>
+            <div class="hero-ctas">
+              <a href="pages/services.html" class="btn-white-pill ripple-btn">Explore AI Solutions</a>
+              <a href="pages/technologies.html" class="btn-neon ripple-btn" style="padding: 0.8rem 1.8rem; font-size: 0.9rem;">Tech Stack</a>
+            </div>
           </div>
-          <div style="display: flex; margin: 0.5rem 0;">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&h=80&q=80" style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #fff; margin-right: -10px; object-fit: cover;">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&h=80&q=80" style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #fff; margin-right: -10px; object-fit: cover;">
-            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&h=80&q=80" style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #fff; margin-right: -10px; object-fit: cover;">
-            <div style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #fff; background: var(--text-primary); color: #fff; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; font-weight: 700;">+2K</div>
+          <div class="hero-right">
+            <div class="hero-image-wrapper">
+              <img src="assets/images/hero_slide_2.png" alt="Cognitive Intelligence" class="hero-slide-img">
+            </div>
           </div>
-          <p class="card-desc" style="font-size: 0.85rem; margin: 0; color: var(--text-secondary);">Verified reviews from leading CTOs and product team leads globally.</p>
+        </div>
+      </div>
+      
+      <!-- Slide 3 -->
+      <div class="hero-slide" style="background-image: url('assets/images/hero_bg_3.png');">
+        <div class="hero-container">
+          <div class="hero-left">
+            <h1 class="hero-title" style="text-transform: uppercase;">
+              Premium Brand &<br>Creative Design
+            </h1>
+            <p class="hero-tagline" style="font-size: 1.2rem; color: rgba(255, 255, 255, 0.7); margin-bottom: 2.5rem; max-width: 600px; line-height: 1.6;">
+              Crafting beautiful, interactive creative portfolios and digital interfaces that elevate your brand voice and captivate users.
+            </p>
+            <div class="hero-ctas">
+              <a href="pages/contact.html" class="btn-white-pill ripple-btn">Start a Project</a>
+              <a href="pages/portfolio.html" class="btn-neon ripple-btn" style="padding: 0.8rem 1.8rem; font-size: 0.9rem;">Creative Works</a>
+            </div>
+          </div>
+          <div class="hero-right">
+            <div class="hero-image-wrapper">
+              <img src="assets/images/hero_slide_3.png" alt="Brand & Design" class="hero-slide-img">
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Slider Controls -->
+    <div class="slider-controls">
+      <button class="slider-control-btn prev-btn">←</button>
+      <div class="slider-dots">
+        <span class="dot active" data-slide="0"></span>
+        <span class="dot" data-slide="1"></span>
+        <span class="dot" data-slide="2"></span>
+      </div>
+      <button class="slider-control-btn next-btn">→</button>
+    </div>
+    
     <a href="#about-preview" class="scroll-indicator">
       <span>Scroll Down</span>
       <div class="scroll-mouse">

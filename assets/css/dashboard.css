@@ -11,6 +11,32 @@
   grid-template-columns: 80px 1fr;
 }
 
+@media (min-width: 1001px) {
+  .db-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 240px !important;
+    height: 100vh !important;
+    z-index: 100 !important;
+    overflow-y: hidden !important;
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
+  
+  .db-sidebar::-webkit-scrollbar {
+    display: none !important;
+  }
+  
+  .db-main {
+    grid-column: 2 !important;
+  }
+  
+  .dashboard-container.sidebar-collapsed .db-sidebar {
+    width: 80px !important;
+  }
+}
+
 /* Sidebar styling */
 .db-sidebar {
   background: rgba(255, 255, 255, 0.6);

@@ -440,6 +440,11 @@ function initGlobalButtonRedirects() {
       const text = link.textContent.trim().toLowerCase();
       const href = link.getAttribute('href');
       
+      // Skip redirect if pointing to index.html or having skip-404 class
+      if (href && (href.includes('index.html') || link.classList.contains('skip-404'))) {
+        return;
+      }
+        
       // Global logout trigger interceptor
       if (href && href.includes('logout.html')) {
         e.preventDefault();
