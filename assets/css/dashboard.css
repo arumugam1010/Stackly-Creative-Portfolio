@@ -207,9 +207,21 @@ body.db-body {
 
 .db-grid-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   margin-bottom: 3rem;
+}
+
+@media (max-width: 1024px) {
+  .db-grid-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .db-grid-stats {
+    grid-template-columns: 1fr;
+  }
 }
 
 .db-stat-card {
@@ -280,11 +292,16 @@ body.db-body {
   opacity: 1;
 }
 
-/* Kanban / Drag and Drop cards */
 .kanban-board-container {
   display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)) !important;
+  grid-template-columns: repeat(3, 1fr) !important;
   gap: 2rem;
+}
+
+@media (max-width: 900px) {
+  .kanban-board-container {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 .kanban-col {
@@ -932,12 +949,23 @@ body.db-body {
   color: #64748b;
 }
 
-/* Shared media & image content blocks */
 .db-media-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   margin-top: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .db-media-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .db-media-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .db-media-card {
@@ -997,9 +1025,21 @@ body.db-body {
 
 .db-client-strip {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 1rem;
   margin-top: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .db-client-strip {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .db-client-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .db-client-chip {

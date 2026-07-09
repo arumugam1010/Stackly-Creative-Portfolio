@@ -2,8 +2,20 @@
 
 .services-full-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 2.5rem;
+}
+
+@media (max-width: 1024px) {
+  .services-full-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .services-full-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .service-card {

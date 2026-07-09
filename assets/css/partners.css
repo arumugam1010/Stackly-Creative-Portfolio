@@ -1,1 +1,19 @@
 @import url('subpages.css');
+
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2.5rem;
+}
+
+@media (max-width: 1024px) {
+  .partners-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .partners-grid {
+    grid-template-columns: 1fr;
+  }
+}
