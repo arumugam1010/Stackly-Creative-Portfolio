@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initDynamicTyping();
   initGlobalButtonRedirects();
   initDashboardUserDisplay();
+  initDynamicFooter();
 });
 
 // Custom Cursor
@@ -27,7 +28,7 @@ function initCustomCursor() {
   document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-    
+
     dot.style.left = mouseX + 'px';
     dot.style.top = mouseY + 'px';
   });
@@ -35,14 +36,14 @@ function initCustomCursor() {
   function animateCursor() {
     let dx = mouseX - cursorX;
     let dy = mouseY - cursorY;
-    
+
     // Smooth trailing
     cursorX += dx * 0.15;
     cursorY += dy * 0.15;
-    
+
     cursor.style.left = cursorX + 'px';
     cursor.style.top = cursorY + 'px';
-    
+
     requestAnimationFrame(animateCursor);
   }
   animateCursor();
@@ -73,7 +74,7 @@ function initThemeToggle() {
 // Scroll Effects (Navbar shrinking, Back-to-Top display)
 function initScrollEffects() {
   const header = document.querySelector('.header-glass');
-  
+
   // Create Back to Top button dynamically
   const backToTop = document.createElement('div');
   backToTop.className = 'back-to-top';
@@ -165,20 +166,20 @@ function initMobileNav() {
     document.body.appendChild(drawer);
 
     const originalItems = Array.from(menu.children);
-    
+
     const wrapper = document.createElement('div');
     wrapper.className = 'mobile-sidebar-wrapper';
     wrapper.style.cssText = 'display: flex; flex-direction: column; width: 100%; height: 100%; text-align: left;';
-    
+
     // 1. Sidebar Header
     const sidebarHeader = document.createElement('div');
     sidebarHeader.className = 'mobile-sidebar-header';
     sidebarHeader.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; width: 100%;';
-    
+
     const isSubPage = window.location.pathname.includes('/pages/') || window.location.pathname.includes('/dashboard/') || window.location.pathname.includes('/authentication/');
     const logoSrc = isSubPage ? '../assets/images/logo-stackly.webp' : 'assets/images/logo-stackly.webp';
     const homeHref = isSubPage ? '../index.html' : 'index.html';
-    
+
     sidebarHeader.innerHTML = `
       <a href="${homeHref}" style="display: flex; align-items: center; text-decoration: none;">
         <img src="${logoSrc}" alt="Stackly Logo" style="height: 24px; width: auto; filter: none; display: block;">
@@ -186,7 +187,7 @@ function initMobileNav() {
       <button class="sidebar-close-btn" style="background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; padding: 0.5rem; line-height: 1;">✕</button>
     `;
     wrapper.appendChild(sidebarHeader);
-    
+
     // 2. Search Box
     const searchBox = document.createElement('div');
     searchBox.className = 'mobile-sidebar-search';
@@ -199,23 +200,23 @@ function initMobileNav() {
       </div>
     `;
     wrapper.appendChild(searchBox);
-    
+
     // 3. Navigation Links List
     const linksList = document.createElement('ul');
     linksList.className = 'mobile-sidebar-links';
     linksList.style.cssText = 'list-style: none; display: flex; flex-direction: column; width: 100%; margin-bottom: 2rem; padding: 0;';
-    
+
     originalItems.forEach(li => {
       const clonedLi = li.cloneNode(true);
       clonedLi.style.cssText = 'width: 100%; list-style: none; padding: 0; margin: 0;';
       const a = clonedLi.querySelector('a');
       if (a) {
         a.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 0; color: var(--text-primary); text-decoration: none; font-size: 0.95rem; font-weight: 600; font-family: var(--font-title); border-bottom: 1px solid var(--border-color); width: 100%; transition: color 0.2s;';
-        
+
         if (a.textContent.trim().toLowerCase() === 'home' || a.textContent.trim().toLowerCase() === 'services' || a.textContent.trim().toLowerCase() === 'blog') {
           a.innerHTML = `<span>${a.textContent}</span><span style="font-size: 0.65rem; color: var(--text-muted); transition: transform 0.3s;">▼</span>`;
         }
-        
+
         a.addEventListener('mouseover', () => a.style.color = 'var(--primary-cyan)');
         a.addEventListener('mouseout', () => a.style.color = 'var(--text-primary)');
 
@@ -223,13 +224,13 @@ function initMobileNav() {
         if (clonedLi.classList.contains('nav-item-dropdown')) {
           const dropdownMenu = clonedLi.querySelector('.nav-dropdown-menu');
           const caret = a.querySelector('span:last-child');
-          
+
           a.addEventListener('click', (e) => {
             if (dropdownMenu) {
               e.preventDefault();
               e.stopPropagation();
               const isClosed = !dropdownMenu.classList.contains('mobile-open');
-              
+
               // Close other open dropdowns first to keep it clean
               linksList.querySelectorAll('.nav-dropdown-menu').forEach(menu => {
                 menu.classList.remove('mobile-open');
@@ -251,7 +252,7 @@ function initMobileNav() {
       linksList.appendChild(clonedLi);
     });
     wrapper.appendChild(linksList);
-    
+
     // 3.5. Portal Login Button inside Mobile Sidebar
     const portalLoginContainer = document.createElement('div');
     portalLoginContainer.className = 'mobile-sidebar-actions';
@@ -261,7 +262,7 @@ function initMobileNav() {
       <a href="${loginUrl}" class="btn-neon ripple-btn" style="display: block; text-align: center; padding: 0.8rem 1.5rem; font-size: 0.9rem; font-weight: 700; border-radius: 30px; text-decoration: none; width: 100%; background: var(--primary-blue); color: #ffffff; box-shadow: var(--shadow-neon-cyan);">Portal Login</a>
     `;
     wrapper.appendChild(portalLoginContainer);
-    
+
     // 4. Contact Info
     const contactInfo = document.createElement('div');
     contactInfo.className = 'mobile-sidebar-contact';
@@ -282,7 +283,7 @@ function initMobileNav() {
       </div>
     `;
     wrapper.appendChild(contactInfo);
-    
+
     drawer.appendChild(wrapper);
 
     const closeBtn = sidebarHeader.querySelector('.sidebar-close-btn');
@@ -328,10 +329,10 @@ function initToastSystem() {
   container.className = 'toast-container';
   document.body.appendChild(container);
 
-  window.showToast = function(message, type = 'info', duration = 3000) {
+  window.showToast = function (message, type = 'info', duration = 3000) {
     const card = document.createElement('div');
     card.className = `toast-card ${type}`;
-    
+
     let icon = 'ℹ️';
     if (type === 'success') icon = '✅';
     if (type === 'error') icon = '❌';
@@ -380,13 +381,13 @@ function initModalSystem() {
   const bodyEl = overlay.querySelector('.modal-body');
   const closeBtn = overlay.querySelector('.modal-close');
 
-  window.openModal = function(title, contentHtml) {
+  window.openModal = function (title, contentHtml) {
     titleEl.textContent = title;
     bodyEl.innerHTML = contentHtml;
     overlay.classList.add('active');
   };
 
-  window.closeModal = function() {
+  window.closeModal = function () {
     overlay.classList.remove('active');
   };
 
@@ -404,7 +405,7 @@ function initDynamicTyping() {
     let wordIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
-    
+
     function type() {
       const currentWord = textArray[wordIndex];
       if (isDeleting) {
@@ -414,9 +415,9 @@ function initDynamicTyping() {
         el.textContent = currentWord.substring(0, charIndex + 1);
         charIndex++;
       }
-      
+
       let speed = isDeleting ? 50 : 150;
-      
+
       if (!isDeleting && charIndex === currentWord.length) {
         speed = 2000; // Pause at end of word
         isDeleting = true;
@@ -425,10 +426,10 @@ function initDynamicTyping() {
         wordIndex = (wordIndex + 1) % textArray.length;
         speed = 500;
       }
-      
+
       setTimeout(type, speed);
     }
-    
+
     type();
   });
 }
@@ -438,17 +439,17 @@ function initGlobalButtonRedirects() {
   document.addEventListener('click', (e) => {
     // Find closest anchor tag
     const link = e.target.closest('a');
-    
+
     // If it is a link
     if (link) {
       const text = link.textContent.trim().toLowerCase();
       const href = link.getAttribute('href');
-      
+
       // Skip redirect if pointing to index.html or having skip-404 class
       if (href && (href.includes('index.html') || link.classList.contains('skip-404'))) {
         return;
       }
-        
+
       // Global logout trigger interceptor
       if (href && href.includes('logout.html')) {
         e.preventDefault();
@@ -480,21 +481,21 @@ function initGlobalButtonRedirects() {
       }
 
       // Check if the link has a button-like style class
-      const hasBtnClass = link.classList.contains('btn') || 
-                          link.classList.contains('btn-neon') || 
-                          link.classList.contains('btn-outline') || 
-                          link.classList.contains('btn-white-pill') || 
-                          link.classList.contains('btn-primary') || 
-                          link.classList.contains('ripple-btn') || 
-                          link.closest('.service-card-actions') || 
-                          link.closest('.pricing-card-action') || 
-                          link.closest('.hero-actions') || 
-                          link.closest('.cta-banner-section') || 
-                          text.includes('apply now') || 
-                          text.includes('pricing') ||
-                          text.includes('details') ||
-                          text.includes('book consultation') ||
-                          text.includes('choose plan');
+      const hasBtnClass = link.classList.contains('btn') ||
+        link.classList.contains('btn-neon') ||
+        link.classList.contains('btn-outline') ||
+        link.classList.contains('btn-white-pill') ||
+        link.classList.contains('btn-primary') ||
+        link.classList.contains('ripple-btn') ||
+        link.closest('.service-card-actions') ||
+        link.closest('.pricing-card-action') ||
+        link.closest('.hero-actions') ||
+        link.closest('.cta-banner-section') ||
+        text.includes('apply now') ||
+        text.includes('pricing') ||
+        text.includes('details') ||
+        text.includes('book consultation') ||
+        text.includes('choose plan');
 
       if (hasBtnClass) {
         e.preventDefault();
@@ -512,24 +513,24 @@ function initGlobalButtonRedirects() {
     const button = e.target.closest('button, input[type="submit"]');
     if (button && !link) {
       // Skip mobile navigation menu toggle and other UI elements
-      if (button.classList.contains('mobile-nav-toggle') || 
-          button.classList.contains('sidebar-close-btn') || 
-          button.classList.contains('theme-toggle-btn') || 
-          button.classList.contains('back-to-top') || 
-          button.closest('.nav-actions') || 
-          button.classList.contains('close-btn') ||
-          button.classList.contains('modal-close') ||
-          button.closest('.auth-container') ||
-          button.closest('.login-card') ||
-          button.closest('.auth-card') ||
-          button.closest('.auth-wrapper') ||
-          button.closest('.panel') ||
-          button.closest('.signin-signup') ||
-          button.closest('.db-header') ||
-          button.closest('.db-sidebar') ||
-          button.closest('.dashboard-container') ||
-          button.closest('.slider-controls') ||
-          button.classList.contains('mobile-db-sidebar-toggle')) {
+      if (button.classList.contains('mobile-nav-toggle') ||
+        button.classList.contains('sidebar-close-btn') ||
+        button.classList.contains('theme-toggle-btn') ||
+        button.classList.contains('back-to-top') ||
+        button.closest('.nav-actions') ||
+        button.classList.contains('close-btn') ||
+        button.classList.contains('modal-close') ||
+        button.closest('.auth-container') ||
+        button.closest('.login-card') ||
+        button.closest('.auth-card') ||
+        button.closest('.auth-wrapper') ||
+        button.closest('.panel') ||
+        button.closest('.signin-signup') ||
+        button.closest('.db-header') ||
+        button.closest('.db-sidebar') ||
+        button.closest('.dashboard-container') ||
+        button.closest('.slider-controls') ||
+        button.classList.contains('mobile-db-sidebar-toggle')) {
         return;
       }
 
@@ -599,6 +600,35 @@ function initDashboardUserDisplay() {
   if (profileEmailInput) {
     profileEmailInput.value = email;
   }
+}
+
+// Dynamically insert Technologies column to fill empty space in all footers
+function initDynamicFooter() {
+  const container = document.querySelector('.footer-container');
+  if (!container) return;
+
+  const brand = container.querySelector('.footer-brand');
+  if (!brand) return;
+
+  // Prevent duplicate rendering
+  if (container.querySelector('[data-tech-col]')) return;
+
+  const isSubPage = window.location.pathname.includes('/pages/') || window.location.pathname.includes('/dashboard/') || window.location.pathname.includes('/authentication/');
+  const techHref = isSubPage ? '../pages/technologies.html' : 'pages/technologies.html';
+
+  const techCol = document.createElement('div');
+  techCol.setAttribute('data-tech-col', 'true');
+  techCol.innerHTML = `
+    <h4 class="footer-heading">Technologies</h4>
+    <ul class="footer-links">
+      <li class="footer-link"><a href="${techHref}">Cloud Native</a></li>
+      <li class="footer-link"><a href="${techHref}">Cyber Security</a></li>
+      <li class="footer-link"><a href="${techHref}">Neural Networks</a></li>
+      <li class="footer-link"><a href="${techHref}">Web Engines</a></li>
+    </ul>
+  `;
+
+  brand.parentNode.insertBefore(techCol, brand.nextSibling);
 }
 
 

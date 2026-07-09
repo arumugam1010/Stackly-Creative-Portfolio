@@ -512,9 +512,35 @@ footer {
   max-width: 1400px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 2.2fr 1fr 1fr 1fr 2fr;
+  grid-template-columns: 2.2fr 1fr 1fr 1fr 1fr 2fr;
   gap: 2.25rem;
   margin-bottom: 2rem;
+}
+
+.footer-container > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.footer-brand .social-links {
+  margin-top: auto;
+}
+
+.footer-contact-list {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-grow: 1;
+}
+
+.footer-contact-list form {
+  margin-top: auto;
 }
 
 .footer-brand p {
