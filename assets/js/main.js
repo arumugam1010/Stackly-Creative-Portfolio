@@ -634,6 +634,10 @@ function initDynamicFooter() {
 
 // 3D Book Page Turn Transition Logic
 function initPageTurnTransitions() {
+  if (window.location.pathname.includes('/dashboard/')) {
+    return;
+  }
+
   const wrapper = document.createElement('div');
   wrapper.className = 'page-turn-wrapper';
   
