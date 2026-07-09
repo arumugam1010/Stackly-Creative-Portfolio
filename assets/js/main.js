@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollEffects();
   initIntersectionObserver();
   initRippleEffect();
+  initActiveNavLinks();
   initMobileNav();
   initToastSystem();
   initModalSystem();
@@ -271,15 +272,15 @@ function initMobileNav() {
     contactInfo.innerHTML = `
       <h4 style="font-family: var(--font-title); color: var(--text-primary); font-size: 0.95rem; font-weight: 700; margin-bottom: 1rem;">Contact Info</h4>
       <div style="margin-bottom: 0.85rem;">
-        <span style="display: block; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.15rem; text-transform: uppercase; letter-spacing: 0.5px;">Phone</span>
+        <span style="display: block; font-size: 0.7rem; color: var(--text-secondary); font-weight: 600; margin-bottom: 0.15rem; text-transform: uppercase; letter-spacing: 0.5px;">Phone</span>
         <a href="tel:+917010792745" style="color: var(--text-primary); text-decoration: none; font-size: 0.85rem; font-weight: 500;">+91 7010792745</a>
       </div>
       <div style="margin-bottom: 0.85rem;">
-        <span style="display: block; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.15rem; text-transform: uppercase; letter-spacing: 0.5px;">Email</span>
+        <span style="display: block; font-size: 0.7rem; color: var(--text-secondary); font-weight: 600; margin-bottom: 0.15rem; text-transform: uppercase; letter-spacing: 0.5px;">Email</span>
         <a href="mailto:info@thestackly.com" style="color: var(--text-primary); text-decoration: none; font-size: 0.85rem; font-weight: 500;">info@thestackly.com</a>
       </div>
       <div>
-        <span style="display: block; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.15rem; text-transform: uppercase; letter-spacing: 0.5px;">Location</span>
+        <span style="display: block; font-size: 0.7rem; color: var(--text-secondary); font-weight: 600; margin-bottom: 0.15rem; text-transform: uppercase; letter-spacing: 0.5px;">Location</span>
         <span style="color: var(--text-primary); font-size: 0.85rem; font-weight: 500;">Stackly, Salem</span>
       </div>
     `;
@@ -607,7 +608,7 @@ function initDashboardUserDisplay() {
   }
 }
 
-// Dynamically insert Technologies column to fill empty space in all footers
+// Dynamically insert Technologies column and update footer links to point to relevant pages
 function initDynamicFooter() {
   const container = document.querySelector('.footer-container');
   if (!container) return;
@@ -618,22 +619,106 @@ function initDynamicFooter() {
   // Prevent duplicate rendering
   if (container.querySelector('[data-tech-col]')) return;
 
-  const isSubPage = window.location.pathname.includes('/pages/') || window.location.pathname.includes('/dashboard/') || window.location.pathname.includes('/authentication/');
-  const techHref = isSubPage ? '../pages/technologies.html' : 'pages/technologies.html';
+  let pathPrefix = '';
+  if (window.location.pathname.includes('/pages/')) {
+    pathPrefix = '';
+  } else if (window.location.pathname.includes('/dashboard/') || window.location.pathname.includes('/authentication/')) {
+    pathPrefix = '../pages/';
+  } else {
+    pathPrefix = 'pages/';
+  }
 
+  // 1. Render Technologies column with relevant page URLs
   const techCol = document.createElement('div');
   techCol.setAttribute('data-tech-col', 'true');
   techCol.innerHTML = `
     <h4 class="footer-heading">Technologies</h4>
     <ul class="footer-links">
-      <li class="footer-link"><a href="${techHref}">Cloud Native</a></li>
-      <li class="footer-link"><a href="${techHref}">Cyber Security</a></li>
-      <li class="footer-link"><a href="${techHref}">Neural Networks</a></li>
-      <li class="footer-link"><a href="${techHref}">Web Engines</a></li>
+      <li class="footer-link"><a href="${pathPrefix}technologies.html">Cloud Native</a></li>
+      <li class="footer-link"><a href="${pathPrefix}support.html">Cyber Security</a></li>
+      <li class="footer-link"><a href="${pathPrefix}projects.html">Neural Networks</a></li>
+      <li class="footer-link"><a href="${pathPrefix}portfolio.html">Web Engines</a></li>
     </ul>
   `;
 
   brand.parentNode.insertBefore(techCol, brand.nextSibling);
+
+  // 2. Find and update the Services column links so they don't all point to services.html
+  const headings = container.querySelectorAll('.footer-heading');
+  headings.forEach(heading => {
+    if (heading.textContent.trim() === 'Services') {
+      const links = heading.nextElementSibling.querySelectorAll('a');
+      links.forEach(link => {
+        const text = link.textContent.trim();
+        if (text === 'Cloud DevOps') {
+          link.href = `${pathPrefix}services.html`;
+        } else if (text === 'Cognitive AI') {
+          link.href = `${pathPrefix}case-studies.html`;
+        } else if (text === 'Quantum Security') {
+          link.href = `${pathPrefix}industries.html`;
+        } else if (text === 'Full-Stack Scale') {
+          link.href = `${pathPrefix}pricing.html`;
+        }
+      });
+    }
+  });
+}
+
+// Automatically highlight active parent navigation links
+function initActiveNavLinks() {
+  const currentPath = window.location.pathname;
+
+  const navLinks = document.querySelectorAll('.nav-menu .nav-link');
+  const dropdownLinks = document.querySelectorAll('.nav-menu .nav-dropdown-menu a');
+
+  // Helper to check if a link points to the current page
+  const isCurrentPage = (href) => {
+    if (!href) return false;
+    // Remove query params and hash fragments
+    const cleanHref = href.split('#')[0].split('?')[0];
+    if (!cleanHref) return false;
+    
+    // Match if pathname ends with the link path (e.g. /projects.html or pages/projects.html)
+    return currentPath.endsWith('/' + cleanHref) || currentPath.endsWith(cleanHref);
+  };
+
+  // Remove all static active classes first
+  navLinks.forEach(link => link.classList.remove('active'));
+
+  // 1. Check if the active page is inside a dropdown
+  let found = false;
+  dropdownLinks.forEach(link => {
+    if (isCurrentPage(link.getAttribute('href'))) {
+      const parentDropdown = link.closest('.nav-item-dropdown');
+      if (parentDropdown) {
+        const parentLink = parentDropdown.querySelector('.nav-link');
+        if (parentLink) {
+          parentLink.classList.add('active');
+          found = true;
+        }
+      }
+    }
+  });
+
+  // 2. If not in a dropdown, check the top-level links
+  if (!found) {
+    navLinks.forEach(link => {
+      if (isCurrentPage(link.getAttribute('href'))) {
+        link.classList.add('active');
+        found = true;
+      }
+    });
+  }
+
+  // 3. Fallback: If still not found and we are at root, highlight Home
+  if (!found && (currentPath === '/' || currentPath.endsWith('index.html') || currentPath.endsWith('/'))) {
+    navLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href && href.endsWith('index.html')) {
+        link.classList.add('active');
+      }
+    });
+  }
 }
 
 // 3D Book Page Turn Transition Logic
@@ -644,20 +729,20 @@ function initPageTurnTransitions() {
 
   const wrapper = document.createElement('div');
   wrapper.className = 'page-turn-wrapper';
-  
+
   // Move direct children of body to the wrapper (excluding script tags, cursors, toasts, modals)
   const children = Array.from(document.body.children);
   children.forEach(child => {
     const tagName = child.tagName.toLowerCase();
-    if (tagName !== 'script' && 
-        !child.classList.contains('custom-cursor') && 
-        !child.classList.contains('custom-cursor-dot') && 
-        !child.classList.contains('toast-container') && 
-        !child.classList.contains('modal')) {
+    if (tagName !== 'script' &&
+      !child.classList.contains('custom-cursor') &&
+      !child.classList.contains('custom-cursor-dot') &&
+      !child.classList.contains('toast-container') &&
+      !child.classList.contains('modal')) {
       wrapper.appendChild(child);
     }
   });
-  
+
   document.body.appendChild(wrapper);
 
   // Trigger enter transition
@@ -671,23 +756,33 @@ function initPageTurnTransitions() {
     if (!link) return;
 
     const href = link.getAttribute('href');
-    
+
     // Check if it's an internal link
-    if (href && 
-        !href.startsWith('#') && 
-        !href.startsWith('javascript:') && 
-        !href.startsWith('tel:') && 
-        !href.startsWith('mailto:') && 
-        !link.getAttribute('target') && 
-        !link.classList.contains('no-transition') &&
-        (href.endsWith('.html') || !href.includes('://'))) {
-      
+    if (href &&
+      !href.startsWith('#') &&
+      !href.startsWith('javascript:') &&
+      !href.startsWith('tel:') &&
+      !href.startsWith('mailto:') &&
+      !link.getAttribute('target') &&
+      !link.classList.contains('no-transition') &&
+      (href.endsWith('.html') || !href.includes('://'))) {
+
+      // Avoid triggering exit transition for same-page hash / anchor changes
+      const currentPath = window.location.pathname;
+      const currentPageName = currentPath.substring(currentPath.lastIndexOf('/') + 1) || 'index.html';
+      const targetPath = href.split('#')[0].split('?')[0];
+      const targetPageName = targetPath.substring(targetPath.lastIndexOf('/') + 1) || 'index.html';
+
+      if (currentPageName === targetPageName) {
+        return;
+      }
+
       e.preventDefault();
-      
+
       // Trigger page turn exit transition
       wrapper.classList.remove('page-turn-enter-active');
       wrapper.classList.add('page-turn-exit-active');
-      
+
       setTimeout(() => {
         window.location.href = href;
       }, 600); // matches the CSS transition time
