@@ -175,8 +175,8 @@ function initMobileNav() {
     sidebarHeader.className = 'mobile-sidebar-header';
     sidebarHeader.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; width: 100%;';
     
-    const isSubPage = window.location.pathname.includes('/pages/');
-    const logoSrc = isSubPage ? '../../assets/images/logo-stackly.webp' : '../../assets/images/logo-stackly.webp';
+    const isSubPage = window.location.pathname.includes('/pages/') || window.location.pathname.includes('/dashboard/') || window.location.pathname.includes('/authentication/');
+    const logoSrc = isSubPage ? '../assets/images/logo-stackly.webp' : 'assets/images/logo-stackly.webp';
     const homeHref = isSubPage ? '../index.html' : 'index.html';
     
     sidebarHeader.innerHTML = `
@@ -292,6 +292,7 @@ function initMobileNav() {
         overlay.classList.remove('open');
         toggle.innerHTML = '☰';
         document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
       });
     }
   }
@@ -303,9 +304,11 @@ function initMobileNav() {
     if (drawer.classList.contains('open')) {
       toggle.innerHTML = '✕';
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
     } else {
       toggle.innerHTML = '☰';
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     }
   });
 
@@ -315,6 +318,7 @@ function initMobileNav() {
     overlay.classList.remove('open');
     toggle.innerHTML = '☰';
     document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
   });
 }
 
