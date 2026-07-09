@@ -1243,3 +1243,31 @@ footer {
     transform: rotate(180deg) !important;
   }
 }
+
+/* 3D Page Turn Transition */
+body {
+  perspective: 2000px;
+  overflow-x: hidden;
+  background-color: var(--bg-dark);
+}
+
+.page-turn-wrapper {
+  transform-origin: left center;
+  transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.7s ease;
+  opacity: 0;
+  transform: rotateY(25deg);
+  backface-visibility: hidden;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.page-turn-wrapper.page-turn-enter-active {
+  opacity: 1;
+  transform: rotateY(0deg);
+}
+
+.page-turn-wrapper.page-turn-exit-active {
+  opacity: 0;
+  transform: rotateY(-95deg) scale(0.92);
+  transition: transform 0.6s cubic-bezier(0.55, 0.085, 0.68, 0.53), opacity 0.6s ease;
+}

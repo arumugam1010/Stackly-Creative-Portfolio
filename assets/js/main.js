@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  initPageTurnTransitions();
   initCustomCursor();
   initThemeToggle();
   initScrollEffects();
@@ -629,6 +630,61 @@ function initDynamicFooter() {
   `;
 
   brand.parentNode.insertBefore(techCol, brand.nextSibling);
+}
+
+// 3D Book Page Turn Transition Logic
+function initPageTurnTransitions() {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'page-turn-wrapper';
+  
+  // Move direct children of body to the wrapper (excluding script tags, cursors, toasts, modals)
+  const children = Array.from(document.body.children);
+  children.forEach(child => {
+    const tagName = child.tagName.toLowerCase();
+    if (tagName !== 'script' && 
+        !child.classList.contains('custom-cursor') && 
+        !child.classList.contains('custom-cursor-dot') && 
+        !child.classList.contains('toast-container') && 
+        !child.classList.contains('modal')) {
+      wrapper.appendChild(child);
+    }
+  });
+  
+  document.body.appendChild(wrapper);
+
+  // Trigger enter transition
+  requestAnimationFrame(() => {
+    wrapper.classList.add('page-turn-enter-active');
+  });
+
+  // Intercept internal links to trigger exit transition
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a');
+    if (!link) return;
+
+    const href = link.getAttribute('href');
+    
+    // Check if it's an internal link
+    if (href && 
+        !href.startsWith('#') && 
+        !href.startsWith('javascript:') && 
+        !href.startsWith('tel:') && 
+        !href.startsWith('mailto:') && 
+        !link.getAttribute('target') && 
+        !link.classList.contains('no-transition') &&
+        (href.endsWith('.html') || !href.includes('://'))) {
+      
+      e.preventDefault();
+      
+      // Trigger page turn exit transition
+      wrapper.classList.remove('page-turn-enter-active');
+      wrapper.classList.add('page-turn-exit-active');
+      
+      setTimeout(() => {
+        window.location.href = href;
+      }, 600); // matches the CSS transition time
+    }
+  });
 }
 
 
