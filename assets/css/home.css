@@ -502,7 +502,7 @@
   height: 500px;
   border: 1px solid var(--border-color);
   border-radius: 16px;
-  background: linear-gradient(135deg, rgba(250, 248, 245, 0.85) 0%, rgba(245, 241, 235, 0.7) 100%), url('../../assets/images/unsplash_2e69c471.webp') center center no-repeat;
+  background: linear-gradient(135deg, rgba(250, 248, 245, 0.25) 0%, rgba(245, 241, 235, 0.15) 100%), url('../../assets/images/world_map_vector.webp') center center no-repeat;
   background-size: cover;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);

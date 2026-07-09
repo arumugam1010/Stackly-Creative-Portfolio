@@ -531,7 +531,11 @@ function initGlobalButtonRedirects() {
         button.closest('.db-sidebar') ||
         button.closest('.dashboard-container') ||
         button.closest('.slider-controls') ||
-        button.classList.contains('mobile-db-sidebar-toggle')) {
+        button.classList.contains('mobile-db-sidebar-toggle') ||
+        button.classList.contains('filter-tab') ||
+        button.classList.contains('filter-btn') ||
+        button.hasAttribute('data-filter') ||
+        button.closest('form')) {
         return;
       }
 
