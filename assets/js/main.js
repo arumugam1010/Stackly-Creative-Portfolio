@@ -176,7 +176,7 @@ function initMobileNav() {
     sidebarHeader.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; width: 100%;';
     
     const isSubPage = window.location.pathname.includes('/pages/');
-    const logoSrc = isSubPage ? '../assets/images/logo-stackly.png' : 'assets/images/logo-stackly.png';
+    const logoSrc = isSubPage ? '../../assets/images/logo-stackly.webp' : '../../assets/images/logo-stackly.webp';
     const homeHref = isSubPage ? '../index.html' : 'index.html';
     
     sidebarHeader.innerHTML = `
@@ -524,6 +524,7 @@ function initGlobalButtonRedirects() {
           button.closest('.db-header') ||
           button.closest('.db-sidebar') ||
           button.closest('.dashboard-container') ||
+          button.closest('.slider-controls') ||
           button.classList.contains('mobile-db-sidebar-toggle')) {
         return;
       }
