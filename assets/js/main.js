@@ -677,7 +677,7 @@ function initActiveNavLinks() {
     // Remove query params and hash fragments
     const cleanHref = href.split('#')[0].split('?')[0];
     if (!cleanHref) return false;
-    
+
     // Match if pathname ends with the link path (e.g. /projects.html or pages/projects.html)
     return currentPath.endsWith('/' + cleanHref) || currentPath.endsWith(cleanHref);
   };
@@ -727,14 +727,23 @@ function initPageTurnTransitions() {
     return;
   }
 
+  const perspectiveContainer = document.createElement('div');
+  perspectiveContainer.className = 'page-perspective-container';
+  perspectiveContainer.style.perspective = '2000px';
+  perspectiveContainer.style.width = '100%';
+  perspectiveContainer.style.minHeight = '100vh';
+  perspectiveContainer.style.position = 'relative';
+
   const wrapper = document.createElement('div');
   wrapper.className = 'page-turn-wrapper';
 
-  // Move direct children of body to the wrapper (excluding script tags, cursors, toasts, modals)
+  // Move direct children of body to the wrapper (excluding script tags, header, cursors, toasts, modals)
   const children = Array.from(document.body.children);
   children.forEach(child => {
     const tagName = child.tagName.toLowerCase();
     if (tagName !== 'script' &&
+      tagName !== 'header' &&
+      !child.classList.contains('header-glass') &&
       !child.classList.contains('custom-cursor') &&
       !child.classList.contains('custom-cursor-dot') &&
       !child.classList.contains('toast-container') &&
@@ -743,7 +752,8 @@ function initPageTurnTransitions() {
     }
   });
 
-  document.body.appendChild(wrapper);
+  perspectiveContainer.appendChild(wrapper);
+  document.body.appendChild(perspectiveContainer);
 
   // Trigger enter transition
   requestAnimationFrame(() => {

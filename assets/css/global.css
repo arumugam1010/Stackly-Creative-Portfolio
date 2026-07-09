@@ -1251,7 +1251,6 @@ footer {
 
 /* 3D Page Turn Transition */
 body {
-  perspective: 2000px;
   overflow-x: hidden;
   background-color: var(--bg-dark);
 }
