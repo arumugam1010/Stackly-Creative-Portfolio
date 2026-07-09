@@ -175,77 +175,97 @@
     display: block !important;
     gap: 2rem !important;
   }
-  .blog-layout > div {
+
+  .blog-layout>div {
     display: block !important;
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
   }
+
   .comment-item {
     flex-direction: column !important;
     gap: 0.75rem !important;
     align-items: flex-start !important;
   }
+
   .comment-avatar {
     width: 36px !important;
     height: 36px !important;
     font-size: 0.85rem !important;
   }
+
   .comment-body {
     padding: 0.75rem !important;
     width: 100% !important;
   }
+
   .comment-header {
     flex-direction: column !important;
     gap: 0.25rem !important;
     align-items: flex-start !important;
   }
+
   .comments-section {
     padding-top: 2rem !important;
     margin-top: 2rem !important;
   }
+
   .blog-meta {
     flex-wrap: wrap !important;
     gap: 0.5rem !important;
     font-size: 0.75rem !important;
   }
+
   .blog-meta span:nth-child(even) {
     display: none !important;
   }
+
   .sidebar-panel {
     gap: 1.5rem !important;
   }
+
   .sidebar-panel .glass-panel {
     padding: 1rem !important;
   }
+
   .tags-cloud {
     gap: 0.5rem !important;
   }
+
   .tag-item {
     padding: 0.25rem 0.5rem !important;
     font-size: 0.75rem !important;
   }
-  .blog-card > div[style*="display:flex"], .blog-card > div[style*="display: flex"] {
+
+  .blog-card>div[style*="display:flex"],
+  .blog-card>div[style*="display: flex"] {
     flex-wrap: wrap !important;
     gap: 0.5rem !important;
   }
-  .blog-card > div[style*="display:flex"] strong, .blog-card > div[style*="display: flex"] strong {
+
+  .blog-card>div[style*="display:flex"] strong,
+  .blog-card>div[style*="display: flex"] strong {
     font-size: 0.8rem !important;
     word-break: break-word !important;
   }
+
   .blog-grid {
     display: block !important;
   }
+
   .blog-title {
     font-size: 1.15rem !important;
     word-break: break-all !important;
     overflow-wrap: break-word !important;
   }
+
   .blog-excerpt {
     font-size: 0.8rem !important;
     margin-bottom: 1rem !important;
   }
+
   .blog-card {
     display: block !important;
     padding: 0.85rem !important;
@@ -256,6 +276,7 @@
     box-sizing: border-box !important;
     margin-bottom: 1.5rem !important;
   }
+
   #comment-form input,
   #comment-form textarea,
   .sidebar-panel input {
